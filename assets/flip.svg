@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 101 97" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
+    <g id="Flip">
+        <path d="M78.607,30.497L69.764,33.033L89.772,45.043L100.376,24.255L91.532,26.791C72.626,4.514 62.381,0.769 49.445,0.929C26.825,2.791 11.023,21.47 5.042,42.913L13.64,48.924C31.17,13.58 48.608,-0.254 78.607,30.497Z" style="fill:#900;"/>
+        <path d="M22.144,67.352L30.987,64.816L10.979,52.806L0.376,73.594L9.219,71.058C28.126,93.334 38.371,97.079 51.306,96.92C73.927,95.057 89.067,77.701 95.048,56.259L86.946,51.067C69.416,86.411 52.143,98.102 22.144,67.352Z" style="fill:#900;"/>
+    </g>
+</svg>

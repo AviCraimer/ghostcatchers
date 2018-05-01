@@ -1,0 +1,29 @@
+.equation {
+
+  display: flex;
+  &__terms-list {
+    display: flex;
+    background: #7b6c86;
+    margin: 10px;
+    padding: 10px;
+    flex: 1 1 200px ;
+    > li { //li
+      margin: 0 15px;
+    }
+    ul { //components list
+      display: flex;
+    }
+
+    &--side1 {
+
+    }
+
+
+    &--side2 {
+
+    }
+  }//terms-list
+
+}//equation
+
+
