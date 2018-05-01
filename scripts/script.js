@@ -72,6 +72,7 @@ function flaskReserveRefresh (operation, sign) { //Operation argument is '+' or 
     let element;
     if (operation === "+") {
       element  = generateSimpleTerm(i*sign, sign);
+
     }
     if (operation === "*") {
       element = generateComponent(i*sign, sign);
@@ -87,10 +88,15 @@ function playerActionsRefresh (operation, sign) {
   if (operation === "+") {
     $('.plus').addClass('active-button');
     $('.times-symbol').removeClass('active-button');
-  }
+    // $('.reserve').addClass('term-sort').removeClass('component-sort');
+    $('.reserve').sortable('option', 'connectWith', '.equation__terms-list' );
+      }
   if (operation === "*") {
     $('.times-symbol').addClass('active-button');
     $('.plus').removeClass('active-button');
+    // $('.reserve').removeClass('term-sort').addClass('component-sort');
+    $('.reserve').sortable('option', 'connectWith', '.components' );
+
   }
 }
 
@@ -102,15 +108,29 @@ function currentReserveSign () {
   return sign;
 }
 
-$(function() {
-//Initialized the player action area
-playerActionsRefresh('+',1);
+function activeOperation () {
+  if ($('.plus').hasClass('active-button')) {return "+"}
+  else if ($('.times-symbol').hasClass('active-button')) {return "*"}
+  else {return null;}
+}
 
+$(function() {
 //Jquery UI Sortable Settings
   $('.reserve').sortable({
-    connectWith: '.equation__terms-list'
-     });
+  connectWith: '.equation__terms-list'
+   });
   $('.equation__terms-list').sortable();
+  $('.components').sortable();
+
+
+  //Preload negative images
+  playerActionsRefresh('+',-1);
+
+  //Initialize the player action area
+  playerActionsRefresh('+',1);
+
+
+
 
 
 
@@ -121,7 +141,7 @@ playerActionsRefresh('+',1);
     playerActionsRefresh('+', currentReserveSign());
   });
   $('.positive-negative').click(function () {
-    playerActionsRefresh('+',-1 * currentReserveSign());
+    playerActionsRefresh(activeOperation(), -1 * currentReserveSign());
   });
   $('.times-symbol').click(function () {
     playerActionsRefresh("*", currentReserveSign());
