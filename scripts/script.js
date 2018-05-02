@@ -25,9 +25,40 @@ function generateImgTag (identifier, sign) { //Identifier is name for ghosts OR 
   }
 }
 
-function typeClass (identifier) {
+function whatType (identifier) {
   return (typeof identifier === "number") ? 'coefficient'  : 'variable';
 }
+
+//Makes the flask Data Object used for building flask components
+function flaskDataObject (number, exponent) {
+  let sign;
+  if (number === 0) {
+    sign = 0;
+  }
+  else if (number < 0) {
+    sign = -1;
+  } else {
+    sign = 1;
+  }
+
+  return  {
+    identifier: number,
+    type: "coefficient",
+    sign: sign,
+    exponent: exponent
+  }
+}
+
+//Makes the ghost data object used for building ghost components
+function ghostDataObject (name, sign, exponent) {
+ return  {
+    identifier: name,
+    type: "variable",
+    sign: sign,
+    exponent: exponent
+  }
+}
+
 
 //Used to create list items used in algebra addition
 function generateSimpleTerm (identifier, sign) { //Second argument is only necessary for ghosts
@@ -35,7 +66,7 @@ function generateSimpleTerm (identifier, sign) { //Second argument is only neces
 
   return `<li class="term">
       <ul class="components">
-        <li class="component ${typeClass(identifier)} ${(sign < 0) ? 'neg' : 'pos' }">
+        <li class="component ${whatType(identifier)} ${(sign < 0) ? 'neg' : 'pos' }">
           ${imgTag}
         </li>
       </ul>
@@ -45,7 +76,7 @@ function generateSimpleTerm (identifier, sign) { //Second argument is only neces
 //Used to create list items used in algebra multiplication
 function generateComponent (identifier, sign) { //Second argument is only necessary for ghosts
   const imgTag = generateImgTag(identifier, sign);
-  return `<li class="component ${typeClass(identifier)} ${(sign < 0) ? 'neg' : 'pos' }">
+  return `<li class="component ${whatType(identifier)} ${(sign < 0) ? 'neg' : 'pos' }">
     ${imgTag}
   </li>`;
 }
@@ -85,18 +116,37 @@ function flaskReserveRefresh (operation, sign) { //Operation argument is '+' or 
 function playerActionsRefresh (operation, sign) {
   flaskReserveRefresh(operation, sign);
   ghostReserveRefresh(operation, sign);
+  $('.equation__terms-list').sortable();
+  $('.components').sortable();
+  $('.reserve').sortable();
+  //For addition, term level sorting
   if (operation === "+") {
     $('.plus').addClass('active-button');
     $('.times-symbol').removeClass('active-button');
-    // $('.reserve').addClass('term-sort').removeClass('component-sort');
+
+    //Disable component level sorting
+    $('.components').sortable('disable');
+
+    //Enable term level sorting
+    $('.equation__terms-list').sortable('enable');
+
+    //connect reserves with term list in the equation area
     $('.reserve').sortable('option', 'connectWith', '.equation__terms-list' );
       }
+
+  //For Multipliation, component level sorting
   if (operation === "*") {
     $('.times-symbol').addClass('active-button');
     $('.plus').removeClass('active-button');
-    // $('.reserve').removeClass('term-sort').addClass('component-sort');
-    $('.reserve').sortable('option', 'connectWith', '.components' );
 
+    //Disable term level sorting in the equation
+    $('.equation__terms-list').sortable('disable');
+
+    //Enable compnent level sorting
+    $('.components').sortable('enable');
+
+    //Connect reserve list with components in the equation area.
+    $('.reserve').sortable('option', 'connectWith', '.equation__terms-list .components' );
   }
 }
 
@@ -115,12 +165,6 @@ function activeOperation () {
 }
 
 $(function() {
-//Jquery UI Sortable Settings
-  $('.reserve').sortable({
-  connectWith: '.equation__terms-list'
-   });
-  $('.equation__terms-list').sortable();
-  $('.components').sortable();
 
 
   //Preload negative images
@@ -128,11 +172,6 @@ $(function() {
 
   //Initialize the player action area
   playerActionsRefresh('+',1);
-
-
-
-
-
 
 
 
@@ -147,7 +186,16 @@ $(function() {
     playerActionsRefresh("*", currentReserveSign());
   });
   $('.flip').click(function () {
+  });
 
+
+  //Equation Event Handlers
+
+  // $( ".equation__terms-list" ).on( "sortreceive", function( event, ui ) {
+  //   console.log(event, ui);
+  // });
+  $( ".equation__terms-list" ).on( "sortover", function( event, ui ) {
+    console.log(event, ui);
   });
 
 });

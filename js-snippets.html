@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script defer src="https: //use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="styles/style.css">
   <title>Title</title>
 </head>
@@ -16,7 +15,7 @@
   <li class="term">
     <ul class="components">
       <li class="component"> <!-- .variable or .coefficient -->
-        <img src="" alt="">
+        component
       </li>
     </ul>
   </li>
@@ -27,9 +26,61 @@
     <img src="" alt="">
   </li>
 
+<script src='https://code.jquery.com/jquery-3.2.1.min.js' integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4='crossorigin='anonymous'></script>
+<script>
+const componentExample = {
+identifier: 'beth', //Or -3 for a three flasks
+type: 'variable',
+sign: -1,
+exponent: 1,
+};
+
+const ghosts =  ["freddie", "marsha", "beth", "bjorn", "pat"];
+
+function flaskDataObject (number, exponent) {
+  let sign;
+  if (number === 0) {
+    sign = 0;
+  }
+  else if (number < 0) {
+    sign = -1;
+  } else {
+    sign = 1;
+  }
+
+  return  {
+    identifier: number,
+    type: "coefficient",
+    sign: sign,
+    exponent: exponent
+  }
+}
+function ghostDataObject (name, sign,  exponent) {
+ return  {
+    identifier: name,
+    type: "variable",
+    sign: sign,
+    exponent: exponent
+  }
+}
 
 
-  <script src="scripts/script.js"></script>
+
+const beth = ghostDataObject('beth', -1,1);
+
+$(function (){
+
+    $('.component').data(beth);
+
+    // console.log(key, beth[key]);
+
+  console.log($('.component').eq(1).data());
+
+})
+
+
+
+</script>
 </body>
 
 </html>

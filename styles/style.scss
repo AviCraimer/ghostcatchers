@@ -23,6 +23,10 @@
 //   justify-content: center;
 // }
 
+html {
+  font-size: 62.5%;
+}
+
 ul, ul ul, li,  li li {
   margin: 0;
   padding: 0;
@@ -73,6 +77,30 @@ ul.flask-reserve, ul.ghost-reserve {
 
 }
 .ghost-reserve {
+
+}
+
+.components {
+  img {
+    max-width: 100px;
+    /*Width  will be 100 pixels at 1400px screen width and 50 pixels REMs at 750px screen width*/
+    width: calc(-0.7692rem + 7.692vw);
+  }
+
+ li { //.component
+   position: relative;
+   &:not(:last-child)::after {
+    content: "";
+    background: url(../assets/times.svg);
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translate(50%, -50%);
+    z-index: 10;
+    }
+ }
 
 }
 
