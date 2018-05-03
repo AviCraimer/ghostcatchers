@@ -104,6 +104,10 @@ ul.flask-reserve, ul.ghost-reserve {
 
 }
 
+.flipped img {
+  transform: rotate(180deg);
+}
+
 .active-button {
   background: rgb(133, 62, 121);
 }

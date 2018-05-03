@@ -1,3 +1,5 @@
+//GLOBAL VARIABLES
+
 const ghosts =  ["freddie", "marsha", "beth", "bjorn", "pat"];
 
 
@@ -59,63 +61,138 @@ function ghostDataObject (name, sign, exponent) {
   }
 }
 
+//Used for testing
+const exampleData = [
+  ghostDataObject('bjorn',-1,1),
+  ghostDataObject('freddie',1,-1),
+  flaskDataObject(2,1)
+];
+
+
 
 //Used to create list items used in algebra addition
+//Deprocated
 function generateSimpleTerm (identifier, sign) { //Second argument is only necessary for ghosts
   const imgTag = generateImgTag(identifier, sign);
 
   return `<li class="term">
       <ul class="components">
-        <li class="component ${whatType(identifier)} ${(sign < 0) ? 'neg' : 'pos' }">
+        <li class="component">
           ${imgTag}
         </li>
       </ul>
   </li>`;
 }
 
+
 //Used to create list items used in algebra multiplication
+//DEPROCATED
 function generateComponent (identifier, sign) { //Second argument is only necessary for ghosts
   const imgTag = generateImgTag(identifier, sign);
-  return `<li class="component ${whatType(identifier)} ${(sign < 0) ? 'neg' : 'pos' }">
+  return `<li class="component">
     ${imgTag}
   </li>`;
 }
 
-function ghostReserveRefresh (operation, sign) { //Operation argument is '+' or '*'
-  $('.ghost-reserve').empty();
-  ghosts.forEach(ghost => {
-    let element;
-    if (operation === "+") {
-      element  = generateSimpleTerm(ghost, sign);
-    }
-    if (operation === "*") {
-      element = generateComponent(ghost, sign);
-    }
-    //Add the term to the DOM at the end of the ghost reserve list
-    $('.ghost-reserve').append(element);
-  });
+//Uses the component data object to build a jQuery element with with data embedded
+function buildComponent (obj) {
+  const imgTag = generateImgTag(obj.identifier, obj.sign);
+  const htmlString = `<li class="component ${(obj.exponent === -1) ? "flipped" : ""}">
+    ${imgTag}
+  </li>`;
+
+  return $(htmlString).data(obj);
+
 }
 
-function flaskReserveRefresh (operation, sign) { //Operation argument is '+' or '*'
-  //Removes all elements from flask reserve area
-  $('.flask-reserve').empty();
-  for (let i = 1; i <= 4; i++) {
-    let element;
-    if (operation === "+") {
-      element  = generateSimpleTerm(i*sign, sign);
+function compareComponents (component1, component2) {
+  const data1 = component1.data();
+  const data2 = component2.data();
 
-    }
-    if (operation === "*") {
-      element = generateComponent(i*sign, sign);
-    }
-    //Add the term to the DOM at the end of the ghost reserve list
-    $('.flask-reserve').append(element);
+ return {
+    //True if the identifiers match, does not take sign or exponent into account
+    match: (data1.identifier === data2.identifier ) ? true : false ,
+
+    //true if one sign is -1 and the other is 1
+    oppositeSigns: (data1.sign * data2.sign === -1) ? true  : false ,
+
+    //True if one has exponent 1 and the other -1, does not take sign into consideration.
+    inverse:  (data1.exponent * data2.exponent === -1) ? true  : false,
+
+    //true if one or both elements are zero
+    zero: (data1.identifier === 0 || data2.identifier === 0) ? true : false
   }
 }
 
-function playerActionsRefresh (operation, sign) {
-  flaskReserveRefresh(operation, sign);
-  ghostReserveRefresh(operation, sign);
+//Returns a jQuery Collection based on a selector, datakey and dataValue
+function selectByData (selector, dataKey, dataValue) {
+  let $filteredElements = $();
+  $(selector).each((i,el) => {
+    if ($(el).data(dataKey) === dataValue) {
+      $filteredElements =  $filteredElements.add(el);
+    }
+   });
+   return $filteredElements;
+}
+
+
+//Used to create direct child of equation list which are used in algebra addition
+function buildTerm (dataObjects) { //takes an array of data objects
+  //Create a jQuery element with basic structure
+  const $htmlTerm =  $(
+  `<li class="term">
+    <ul class="components">
+    </ul>
+  </li>`);
+
+  //For each data object, build a component, and append it to the term element.
+  dataObjects.forEach((obj) =>{
+    const $component = buildComponent(obj);
+    $htmlTerm.children().append($component);
+  })
+
+  return $htmlTerm;
+}
+
+
+function ghostReserveRefresh (operation, sign, exponent) { //Operation argument is '+', '*'
+  $('.ghost-reserve').empty();
+  ghosts.forEach(ghost => {
+    const ghostData = ghostDataObject(ghost, sign, exponent);
+    let $element;
+    if (operation === "+") {
+      $element  = buildTerm([ghostData]);
+    }
+    if (operation === "*") {
+      $element = buildComponent(ghostData);
+    }
+    //Add the term to the DOM at the end of the ghost reserve list
+    $('.ghost-reserve').append($element);
+  });
+}
+
+function flaskReserveRefresh (operation, sign, exponent) { //Operation argument is '+' or '*'
+  //Removes all elements from flask reserve area
+  $('.flask-reserve').empty();
+  for (let i = 1; i <= 4; i++) {
+    const flaskData = flaskDataObject(i*sign, exponent);
+    let $element;
+    if (operation === "+") {
+      $element  = buildTerm([flaskData]);
+
+    }
+    if (operation === "*") {
+      $element = buildComponent(flaskData);
+    }
+    //Add the term to the DOM at the end of the flask reserve list
+    $('.flask-reserve').append($element);
+  }
+}
+
+
+function playerActionsRefresh (operation, sign, exponent) {
+  flaskReserveRefresh(operation, sign, exponent);
+  ghostReserveRefresh(operation, sign, exponent);
   $('.equation__terms-list').sortable();
   $('.components').sortable();
   $('.reserve').sortable();
@@ -151,11 +228,11 @@ function playerActionsRefresh (operation, sign) {
 }
 
 function currentReserveSign () {
-  let sign = 1;
-    if ($('.flask-reserve .component').hasClass('neg')) {
-      sign = -1;
-    }
-  return sign;
+  return  $('.flask-reserve .component').data('sign');
+}
+
+function currentExponent () {
+ return $('.flask-reserve .component').data('exponent');
 }
 
 function activeOperation () {
@@ -168,24 +245,25 @@ $(function() {
 
 
   //Preload negative images
-  playerActionsRefresh('+',-1);
+  playerActionsRefresh('+',-1, 1);
 
   //Initialize the player action area
-  playerActionsRefresh('+',1);
+  playerActionsRefresh('+',1, 1);
 
 
 
  // Player Action Button Events Handlers
   $('.plus').click(function () {
-    playerActionsRefresh('+', currentReserveSign());
+    playerActionsRefresh('+', currentReserveSign(), currentExponent() );
   });
   $('.positive-negative').click(function () {
-    playerActionsRefresh(activeOperation(), -1 * currentReserveSign());
+    playerActionsRefresh(activeOperation(), -1 * currentReserveSign(), currentExponent() );
   });
   $('.times-symbol').click(function () {
-    playerActionsRefresh("*", currentReserveSign());
+    playerActionsRefresh("*", currentReserveSign(), currentExponent());
   });
   $('.flip').click(function () {
+    playerActionsRefresh(activeOperation(), currentReserveSign(), -1 * currentExponent());
   });
 
 

@@ -1,6 +1,7 @@
 .equation {
 
   display: flex;
+  flex-direction: column;
   &__terms-list {
     display: flex;
     background: #7b6c86;

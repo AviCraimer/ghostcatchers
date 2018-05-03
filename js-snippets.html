@@ -37,6 +37,30 @@ exponent: 1,
 
 const ghosts =  ["freddie", "marsha", "beth", "bjorn", "pat"];
 
+function ghostFileName (ghostName,sign) { //For sign put in 1 or -1
+  return (sign < 0) ? `assets/${ghostName}-negative.svg` : `assets/${ghostName}-positive.svg`;
+}
+
+function flaskFileName (number) { //takes positive or negative integers betweeen 0 and +-4
+  if (number === 0) {return `assets/${number}-flasks`;}
+  else {
+    return (number > 0) ? `assets/${number}-flasks-pos.svg` : `assets/${number*-1}-flasks-neg.svg`;
+   }
+  }
+
+function generateImgTag (identifier, sign) { //Identifier is name for ghosts OR number for flasks, sign is 1 or -1. Second argument is only necessary for ghosts
+
+  if (typeof identifier === "number") {
+    // const fileName = flaskFileName(identifier);
+    return `<img src="${flaskFileName((identifier))} " alt="${identifier} Flasks ">`;
+  } else if (typeof identifier === "string" ) {
+    // const filename = ghostFileName(identifier, sign);
+    return  `<img src="${ghostFileName(identifier,sign)} " alt="${identifier}">`;
+  } else {
+    return null;
+  }
+}
+
 function flaskDataObject (number, exponent) {
   let sign;
   if (number === 0) {
@@ -64,17 +88,30 @@ function ghostDataObject (name, sign,  exponent) {
   }
 }
 
+function buildComponent (obj) {
+  const imgTag = generateImgTag(obj.identifier, obj.sign);
+  const htmlString = `<li class="component ${obj.type} ${obj.sign}">
+    ${imgTag}
+  </li>`;
 
+  return $(htmlString).data(obj);
+}
 
 const beth = ghostDataObject('beth', -1,1);
 
+const $beth = buildComponent(beth);
+
 $(function (){
+
+
 
     $('.component').data(beth);
 
+
+
     // console.log(key, beth[key]);
 
-  console.log($('.component').eq(1).data());
+  console.log('data retreived from li element', $('.component').eq(1).data());
 
 })
 

@@ -1,46 +1,31 @@
 
 
-const allComponents = {
-  flasks: [
-    {
-      identifier: ,
-     },
-
-     ]
-}
-
-
-//takes a componentData object and returns html code for that component element.
+DONE //takes a componentData object and returns html code for that component element.
 function buildComponent (componentData) {
 
 
-//Here is an example of what would be passed to the buildComponent function
-const componentExample = {
-identifier: 'beth', //Or -3 for a three flasks
-type: 'variable'
-sign: -1,
-exponent: 1,
-};
-}
+DONE//Here is an example of what would be passed to the buildComponent function
+  const componentExample = {
+  identifier: 'beth', //Or -3 for a three flasks
+  type: 'variable'
+  sign: -1,
+  exponent: 1,
+  };
+  }
 
 
 
 
 
 
-function buildTerm (arrayOfComponents) {
+DONE - function buildTerm (arrayOfComponents) {
  //can be in addition to the buildsimpleterm
 
  //return html for term
 }
 
-buildEquationSide (arrayOfTerms, sideNumber) { //2nd argument is 1 or 2 for first side, second side
 
-  //assembles components and terms and places them on the page
-}
-
-
-
+DONE
 function compareItems () {
 
 }
@@ -62,3 +47,41 @@ function adjacentElements () {
 return //array of data from original element and it's next and prev (returns null if there is not a next or prev)
 }
 
+
+
+TO DO
+
+buildEquationSide (arrayOfTerms, sideNumber) { //2nd argument is 1 or 2 for first side, second side
+
+  //assembles components and terms and places them on the page
+}
+
+
+
+
+function ghostFileName (ghostName,sign)
+function flaskFileName (number) 4
+function generateImgTag (identifier, sign)
+function whatType (identifier)
+
+function flaskDataObject (number, exponent)
+function ghostDataObject (name, sign, exponent)
+
+function generateSimpleTerm (identifier, sign)
+function generateComponent (identifier, sign)
+function buildComponent (obj)
+
+
+function compareComponents (component1, component2)
+function selectByData (selector, dataKey, dataValue)
+
+function buildTerm (dataObjects)
+
+function ghostReserveRefresh (operation, sign, exponent)
+function flaskReserveRefresh (operation, sign, exponent)
+
+function playerActionsRefresh (operation, sign, exponent)
+
+function currentReserveSign ()
+function currentExponent ()
+function activeOperation ()
