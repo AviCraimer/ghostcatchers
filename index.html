@@ -5,49 +5,46 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles/animate.min.css">
   <link rel="stylesheet" href="styles/style.css">
   <title>Junior Ghost Catchers</title>
 </head>
 
 <body>
-  <h1>Junior Ghost Catchers</h1>
+  <header>
+        <h1>Junior Ghost Catchers</h1>
+        <form action="">
+          <select class="level-select" name="level-selection" id="">
+            <option value="Level 1">Level 1</option>
+            <option value="Level 2">Level 2</option>
+            <option value="Level 3">Level 3</option>
+            <option value="Level 4">Level 4</option>
+            <option value="Level 5">Level 5</option>
+            <option value="Level 6">Level 6</option>
+            <option value="Level 7">Level 7</option>
+            <option value="Level 8">Level 8</option>
+            <option value="Level 9">Level 9</option>
+            <option value="Level 10">Level 10</option>
+          </select>
+        </form>
+  </header>
   <main>
     <section class="player-actions">
+
       <div class="actionButtons">
         <button class="plus"><img src="assets/plus.svg" alt=""></button>
         <button class="positive-negative" ><img src="assets/positive-negative.svg" alt=""></button>
         <button class="times-symbol" ><img src="assets/times.svg" alt=""></button>
         <button class="flip"><img src="assets/flip.svg" alt=""></button>
       </div>
-      <ul class="flask-reserve reserve">
-
-      </ul>
-      <ul class="ghost-reserve reserve">
-
-      </ul>
+      <div class="reserve-areas">
+        <ul class="flask-reserve reserve">  </ul>
+        <ul class="ghost-reserve reserve">  </ul>
+      </div>
     </section>
     <section class="equation">
-      <ul class="equation__terms-list  equation__terms-list--side1">
-        <li class="term">
-          <ul class="components">
-            <li class="component"><img src="assets/2-flasks-pos.svg" alt=""></li>
-            <li class="component"><img src="assets/freddie-positive.svg" alt=""></li>
-          </ul>
-        </li>
-        <li class="term">
-          <ul class="components">
-            <li class="component"><img src="assets/bjorn-negative.svg" alt=""></li>
-          </ul>
-        </li>
-        <li class="term">
-          <ul class="components">
-            <li class="component"><img src="assets/beth-positive.svg" alt=""></li>
-          </ul>
-        </li>
-      </ul>
-      <ul class="equation__terms-list  equation__terms-list--side2">
-
-      </ul>
+      <ul class="equation__terms-list  equation__terms-list--side1"> <!-- Equation side 1 goes here  --> </ul>
+      <ul class="equation__terms-list  equation__terms-list--side2"> <!-- Equation side 2 goes here  -->  </ul>
     </section>
   </main>
 

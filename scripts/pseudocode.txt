@@ -1,4 +1,61 @@
 
+TO DO
+
+Make areas not change size
+
+EVENTS
+Build event handler that checks each time the equation is sorted (either moving into equation, or re-arranging equation).
+  --This will check  whether any of two adjacent terms  addatively cancel OR whether any two adjacent components are inverse. It then applies an animate and bounce class..
+  --Will likely use a combination of the adjacent comparison and the additive cancellation function.
+  --Also, apply a style class to highlight those terms that are ready to cancel.
+  --I can then use this class to trigger the cancelation event on the next drop.
+
+ ---QUESTION IF I PUT MY EVENT HANDLER IN EVENTS WILL IT KEEP CREATING NEW HANDLERS, or with it just switch which handler is associated with sortable? I can test this by console logging and see if there is one or more?
+
+
+---Function to freeze sorting after adding to one side or to one term. Require dragging all others.
+  --Leave this until later as it may be complex.
+  --Get the addative and inverse cancellation working first.
+
+
+LEVEL STUFF
+  --Write level objects in increasing difficulty and complexity
+  --Write level intro text in word doc to edit, etc.
+  --Hook up level select form element to load level.
+
+SORTABLE
+--I set the placeholder class and styled it, and set it visible, but the styles aren't showing up?
+--I need to watch the tutorial again, with the indian guy.
+
+LAYOUT
+  --Need to move the buttons up above for mobile. Or to the side of the equation.
+
+ANIMATE.CSS
+
+Addative Cancellation
+
+Ready to go
+Bounce
+
+
+Exit
+rotateOut
+
+
+
+COMPLETED MAY 3rd
+
+
+DONE -- Level loading
+
+DONE - buildEquationSide (arrayOfTerms, sideNumber) { //2nd argument is 1 or 2 for first side, second side
+
+  //assembles components and terms and places them on the page
+}
+
+
+
+COMPLETED MAY 2
 
 DONE //takes a componentData object and returns html code for that component element.
 function buildComponent (componentData) {
@@ -14,10 +71,6 @@ DONE//Here is an example of what would be passed to the buildComponent function
   }
 
 
-
-
-
-
 DONE - function buildTerm (arrayOfComponents) {
  //can be in addition to the buildsimpleterm
 
@@ -30,31 +83,27 @@ function compareItems () {
 
 }
 
-
+DONE
 function signOfTerm ($term) {
 //This function multiplies the sign values of all child li.component elements inside the jquery li.term element.
 //It returns the overall sign of the term.
 //Used for additive cancelation
 }
 
+DONE
 function extractComponentData ($component) {
 }
 //This function accepts a jquery object for the li with class of .component, and it returns  the data object for that component.
 
 
-function adjacentElements () {
-
+DONE - not as described, I made a function to compare all adjacent elements.
+function  adjacentElements () {
 return //array of data from original element and it's next and prev (returns null if there is not a next or prev)
 }
 
+DONE -
+additive cancellation: test if two terms will cancel, i.e., have the same components and opposite signs.
 
-
-TO DO
-
-buildEquationSide (arrayOfTerms, sideNumber) { //2nd argument is 1 or 2 for first side, second side
-
-  //assembles components and terms and places them on the page
-}
 
 
 

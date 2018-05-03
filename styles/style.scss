@@ -6,108 +6,16 @@
 //components
 @import "components/header";
 @import "components/footer";
+@import "components/player-actions";
 @import "components/equation";
 
 
 
-// body {
-//   background-color: rgb(70, 70, 70);
-// }
-
-// main {
-//   background-color: rgb(195, 220, 236);
-//   width: 70%;
-//   margin: auto;
-//   padding: 200px;
-//   display: flex;
-//   justify-content: center;
-// }
-
-html {
-  font-size: 62.5%;
-}
-
-ul, ul ul, li,  li li {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: block;
-}
-
-img {
-  width: 100%;
-}
-
-.ui-sortable-helper {
-  transition: none;
-}
 
 
-.player-actions {
-  display: flex;
-  align-items: center;
-  // width: 200px;
-  button {
-   padding: 0;
-   margin: 0;
-  }
 
-}
 
-ul.flask-reserve, ul.ghost-reserve {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 5px;
-  margin: 5px;
-  background-color: #7b6c86;
-  border-radius: 8px;
-  > li {
-    margin: 10px;
-  }
-}
 
-.actionButtons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
 
-}
-.flask-reserve {
 
-}
-.ghost-reserve {
 
-}
-
-.components {
-  img {
-    max-width: 100px;
-    /*Width  will be 100 pixels at 1400px screen width and 50 pixels REMs at 750px screen width*/
-    width: calc(-0.7692rem + 7.692vw);
-  }
-
- li { //.component
-   position: relative;
-   &:not(:last-child)::after {
-    content: "";
-    background: url(../assets/times.svg);
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translate(50%, -50%);
-    z-index: 10;
-    }
- }
-
-}
-
-.flipped img {
-  transform: rotate(180deg);
-}
-
-.active-button {
-  background: rgb(133, 62, 121);
-}

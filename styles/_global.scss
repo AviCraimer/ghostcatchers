@@ -1,0 +1,77 @@
+html {
+  font-size: 62.5%;
+}
+
+ul, ul ul, li,  li li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: block;
+}
+
+img {
+  width: 100%;
+}
+
+main {
+  position: relative;
+
+
+}
+
+
+// .ui-sortable-helper {
+//   transition: none;
+// }
+
+
+
+.components {
+  img { //components image
+    max-width: 100px;
+    width: $sprite-width;
+  }
+
+
+.component-placeholder, .term-placeholder  {
+  visibility: visible;
+}
+
+.component-placeholder  {
+  background: red;
+
+}
+
+.term-placeholder  {
+  background:blue;
+}
+
+ li { //.component
+   position: relative;
+   &:not(:last-child)::after {
+    content: "";
+    background: url(../assets/times.svg);
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translate(50%, -50%);
+    z-index: 10;
+    }
+ }
+
+}
+
+button img {
+    max-width: 100px;
+    width: $sprite-width;
+}
+
+.flipped img {
+  transform: rotate(180deg);
+}
+
+.active-button {
+  background: rgb(133, 62, 121);
+}
