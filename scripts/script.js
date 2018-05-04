@@ -211,15 +211,6 @@ function matchTest (component1, component2) { //Checks for matching values, not 
   return (results.match) ? true : false ;
 }
 
-function termSign (term) { //Takes an HTML .term element
-  const components = $(term).find('.component');
-  let termSign = 1;
-  components.each((i,el) => {
-    termSign = termSign * $(el).data("sign");
-  });
-  return  termSign;
-}
-
 
 function getComponentData ($components) {
   let data = [];
@@ -266,6 +257,16 @@ function termMatch (term1, term2) { //Takes two HTML .term elements returns whet
 }
 
 
+function termSign (term) { //Takes an HTML .term element
+  const components = $(term).find('.component');
+  let termSign = 1;
+  components.each((i,el) => {
+    termSign = termSign * $(el).data("sign");
+  });
+  return  termSign;
+}
+
+
 function additiveCancellationTest(term1, term2 ) {
   if ( termSign(term1) ===  termSign(term2) ) {
     return false;
@@ -304,9 +305,9 @@ function compareAdjacentElements ($siblings, testFunction ) {
 
 
 //Returns a jQuery Collection based on a selector, datakey and dataValue
-function selectByData (selector, dataKey, dataValue) {
+function selectByData ($elements, dataKey, dataValue) {
   let $filteredElements = $();
-  $(selector).each((i,el) => {
+  $elements.each((i,el) => {
     if ($(el).data(dataKey) === dataValue) {
       $filteredElements =  $filteredElements.add(el);
     }
@@ -332,23 +333,30 @@ function equationSideRefresh (termArray, sideNumber) {
   });
 }
 
+//Ensures that any newley created elements are sortable
+function sortableRefresh () {
+  $('.reserve').sortable();
+  $('.reserve .components').sortable();
+  $('.equation__terms-list').sortable({
+    containment: "parent",
+    distance: 5,
+    update: termUpdate
+  } );
+  $('.equation .components').sortable({
+      distance: 5,
+      update: function (event) {
+         termUpdate(event);
+         componentUpdate(event);
+        }
+    });
+}
+
 function levelRefresh (levelObj) {
 //Level object has 3 properties:   {side1:, side1:. intro-text:  }
 
-
 equationSideRefresh(levelObj.side1, 1);
 equationSideRefresh(levelObj.side2, 2);
-$('.equation__terms-list').sortable({
-  containment: "parent",
-  placeholder: "term-placeholder",
-  distance: 5,
-  update: termUpdate
-} );
-$('.equation .components').sortable({
-    placeholder: "component-placeholder",
-    distance: 3
-
-  });
+sortableRefresh()
 
 //TO ADD: RUN INTRO TEXT
 }
@@ -392,9 +400,8 @@ function flaskReserveRefresh (operation, sign, exponent) { //Operation argument 
 function playerActionsRefresh (operation, sign, exponent) {
   flaskReserveRefresh(operation, sign, exponent);
   ghostReserveRefresh(operation, sign, exponent);
+  sortableRefresh ()
 
-  $('.reserve').sortable();
-  $('.reserve .components').sortable();
   //For addition, term level sorting
   if (operation === "+") {
     $('.plus').addClass('active-button');
@@ -426,11 +433,9 @@ function playerActionsRefresh (operation, sign, exponent) {
   }
 }
 
-
-
 //EVENT HANDLING FUNCTIONS
 function termUpdate(event) {
-  const $termList = $(event.target);
+  const $termList = $(event.target).closest('.terms') ;
   const testResults =  compareAdjacentElements($termList.children(), additiveCancellationTest);
 
   //Remove Bounce Class on All False Pairs
@@ -448,23 +453,88 @@ function termUpdate(event) {
 }
 
 
-function componentClick (event) {
-  console.log(event);
+function componentUpdate (event) {
+  $componentsList = $(event.target);
+  const testResults = compareAdjacentElements($componentsList.children(), inverseTest )
+  console.log(testResults);
+
+  //Remove Swing Class on All False Pairs
+  testResults.forEach(result => {
+    if (result.test === false) {
+      result.$pair.removeClass('swing');
+    }
+  });
+
+  //Add swing, animated, and infinite to all true pairs.
+  testResults.forEach(result => {
+    if (result.test === true) {
+      result.$pair.addClass('animated swing infinite');
+    }
+  });
 }
 
+//Cancels components
+function componentCancel(event) {
+  const $componentLi = $(event.currentTarget);
+  let $remove = $componentLi;
+  const prev = ($componentLi.prev().length > 0 ) ? $componentLi.prev() : null ;
+  const next = ($componentLi.next().length > 0 ) ? $componentLi.next() : null ;
 
+  if ( $componentLi.hasClass("swing") ) {
+    if (prev) {
+      if ($(prev).hasClass("swing") && $(prev).data("identifier") === $componentLi.data("identifier") ) {
+        $remove = $remove.add( prev );
+      }
+    }
+    if (next) {
+      if ($(next).hasClass("swing") && $(next).data("identifier") === $componentLi.data("identifier") ) {
+        $remove = $remove.add( next );
+      }
+    }
+  }
 
+  //Remove the swing class, even for 3 in a row,
+  $remove.removeClass('swing');
+
+  //If there are three in a row, only the first two cancel
+  if ($remove.length > 2) {
+    $remove = $remove.eq(0).add($remove.eq(1));
+  }
+
+  $remove.eq(0).removeClass('infinite').addClass('rotateOut');
+  $remove.eq(1).removeClass('infinite').addClass('rotateOut');
+
+  const oneFlask =  buildComponent(flaskDataObject(1,1));
+  oneFlask.addClass('rollIn animated');
+
+  $remove.eq(0).after(oneFlask);
+
+  setTimeout(() => {
+    $remove.remove();
+    oneFlask.removeClass('rollIn');
+  }, 500);
+}
+
+//Cancels like terms that have opposite signs
 function termCancel (event) {
   const $termLi = $(event.currentTarget);
   let $remove = $termLi;
+  const prev = ($termLi.prev().length > 0 ) ? $termLi.prev() : null ;
+  const next = ($termLi.next().length > 0 ) ? $termLi.next() : null ;
+
   if ( $termLi.hasClass("bounce") ) {
-    if ($termLi.prev().hasClass("bounce")) {
-      $remove = $remove.add( $termLi.prev() );
+    if (prev) {
+      if ($(prev).hasClass("bounce") && termMatch($termLi[0], prev )) {
+        $remove = $remove.add( prev );
+      }
     }
-    if ($termLi.next().hasClass("bounce")) {
-      $remove = $remove.add( $termLi.next() );
+    if (next) {
+      if ($(next).hasClass("bounce") && termMatch($termLi[0], next )) {
+        $remove = $remove.add( next );
+      }
     }
   }
+
 
   //Remove the bounce class, even for 3 in a row, all spot bouncing
   $remove.removeClass('bounce');
@@ -483,9 +553,39 @@ function termCancel (event) {
 
   setTimeout(() => {
     $remove.remove();
-    zeroFlask.removeClass('jackInTheBox').addClass('bounce infinite');
+    zeroFlask.removeClass('jackInTheBox').addClass('pulse infinite');
   }, 500);
+}
 
+
+function zeroCancel (event) {
+  const $termLi = $(event.currentTarget);
+  const $components = $termLi.find('.component');
+
+  //Select only the components that have 0 as an identifier
+  const $zeros = selectByData($components, "identifier", 0);
+
+  //If there are any zeros in the term, cancel the whole term.
+  if ($zeros.length > 0) {
+    $termLi.removeClass('infinite pulse').addClass('zoomOut');
+
+    setTimeout(() => {
+      $termLi.remove();
+    }, 500);
+  }
+}
+
+
+function oneCancel (event) {
+  const $componentLi = $(event.currentTarget);
+
+  //If there is a 1-flask component with at least 1 sibling remove it
+  if ($componentLi.data("identifier") === 1 && $componentLi.siblings().length >  0) {
+    $componentLi.addClass('infinite rollOut animated');
+    setTimeout(() => {
+      $componentLi.remove();
+    }, 500);
+  }
 }
 
 
@@ -528,9 +628,15 @@ $(function() {
     if ($(this).hasClass('bounce')) {
       termCancel(event);
     }
+    zeroCancel(event);
+  });
 
+  $('.equation').on('click', '.component', function (event) {
+    oneCancel(event);
 
-  } );
+    if ($(this).hasClass('swing') ) {
+      componentCancel(event);
+    }
+  });
 
-
-});
+});//END OF DOCUMENT READY FUNCTION

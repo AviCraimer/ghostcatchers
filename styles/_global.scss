@@ -2,6 +2,11 @@ html {
   font-size: 62.5%;
 }
 
+body {
+  background: $bgColor;
+}
+
+
 ul, ul ul, li,  li li {
   margin: 0;
   padding: 0;
@@ -63,9 +68,14 @@ main {
 
 }
 
-button img {
+button{
+  background: transparent;
+  border: none;
+
+  img {
     max-width: 100px;
     width: $sprite-width;
+  }
 }
 
 .flipped img {
