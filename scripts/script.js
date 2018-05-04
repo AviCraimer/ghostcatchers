@@ -20,18 +20,45 @@ levels[0]  = {
     introText: "Basic addition canceling",
     side1:
       [
-        [
-          ghostDataObject('beth',-1,1)
-        ],
-        [
-          ghostDataObject('freddie',1,1)
-        ],
-        [
-          ghostDataObject('beth',1,1)
-        ]
+        [ ghostDataObject('beth',-1,1) ],
+        [ ghostDataObject('freddie',1,1) ],
+        [ ghostDataObject('beth',1,1) ]
       ],
-    side2: [ [flaskDataObject(3,1), ghostDataObject('bjorn',1,-1)  ] ]
+    side2: [ [flaskDataObject(3,1), ghostDataObject('bjorn',1,-1)] ]
   }
+
+levels[1] = {
+  name: "Level 1",
+  introText: "Cancelling ones",
+  side1:
+    [
+      [ ghostDataObject('marsha', 1, 1) ],
+      [ ghostDataObject('freddie', 1, 1), flaskDataObject(1,1)],
+      [ ghostDataObject('marsha', -1, 1), flaskDataObject(1,1)]
+    ],
+  side2: [ [ghostDataObject('pat',1,1)] ]
+};
+
+
+//Template
+levels[9] = {
+  name: "Level 1",
+  introText: "Cancelling ones",
+  side1:
+    [
+      [ ], //term1
+      [ ], //term2
+      [ ] //term3
+    ],
+  side2:
+    [
+      [], //term1
+      [], //term2
+      [] //term3
+    ]
+};
+
+
 
 //FUNCTIONS
 
@@ -435,7 +462,8 @@ function playerActionsRefresh (operation, sign, exponent) {
 
 //EVENT HANDLING FUNCTIONS
 function termUpdate(event) {
-  const $termList = $(event.target).closest('.terms') ;
+
+  const $termList = $(event.target).closest('.terms') ; //Selects the terms UL
   const testResults =  compareAdjacentElements($termList.children(), additiveCancellationTest);
 
   //Remove Bounce Class on All False Pairs
@@ -456,7 +484,6 @@ function termUpdate(event) {
 function componentUpdate (event) {
   $componentsList = $(event.target);
   const testResults = compareAdjacentElements($componentsList.children(), inverseTest )
-  console.log(testResults);
 
   //Remove Swing Class on All False Pairs
   testResults.forEach(result => {
@@ -473,7 +500,7 @@ function componentUpdate (event) {
   });
 }
 
-//Cancels components
+//Cancels components where 1-flask is being multiplied by other components
 function componentCancel(event) {
   const $componentLi = $(event.currentTarget);
   let $remove = $componentLi;
@@ -501,18 +528,21 @@ function componentCancel(event) {
     $remove = $remove.eq(0).add($remove.eq(1));
   }
 
-  $remove.eq(0).removeClass('infinite').addClass('rotateOut');
-  $remove.eq(1).removeClass('infinite').addClass('rotateOut');
+  $remove.eq(0).removeClass('infinite').addClass('rollOut');
+  $remove.eq(1).removeClass('infinite').addClass('rollOut');
 
   const oneFlask =  buildComponent(flaskDataObject(1,1));
-  oneFlask.addClass('rollIn animated');
 
-  $remove.eq(0).after(oneFlask);
+  oneFlask.addClass('zoomIn animated no-after');
+
+  setTimeout(() => {
+    $remove.eq(0).after(oneFlask);
+  }, 500);
 
   setTimeout(() => {
     $remove.remove();
-    oneFlask.removeClass('rollIn');
-  }, 500);
+    oneFlask.removeClass('zoomIn no-after');
+  }, 1200);
 }
 
 //Cancels like terms that have opposite signs
@@ -582,8 +612,15 @@ function oneCancel (event) {
   //If there is a 1-flask component with at least 1 sibling remove it
   if ($componentLi.data("identifier") === 1 && $componentLi.siblings().length >  0) {
     $componentLi.addClass('infinite rollOut animated');
+
+    //get a sibling to be target for term update
+    const $sibling = $componentLi.siblings().eq(0);
+
     setTimeout(() => {
       $componentLi.remove();
+
+      //Check if terms additively cancel without the one.
+      termUpdate({target: $sibling});
     }, 500);
   }
 }
@@ -597,7 +634,7 @@ function oneCancel (event) {
 //DOCUMENT READY FUNCTION
 $(function() {
   //Load Level 1
-  levelRefresh(levels[0]);
+  levelRefresh(levels[1]);
 
   //Preload negative images
   playerActionsRefresh('+',-1, 1);
@@ -621,7 +658,6 @@ $(function() {
   $('.flip').click(function () {
     playerActionsRefresh(activeOperation(), currentReserveSign(), -1 * currentExponent());
   });
-
 
   //Equation Event Handlers
   $('.equation').on('click', '.term', function (event) {
