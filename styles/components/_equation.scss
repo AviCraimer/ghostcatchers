@@ -1,18 +1,27 @@
 .equation {
-
+  padding: 1px;
   display: flex;
   flex-direction: column;
-  height: 66.6vh;
   &__terms-list { //ul
     display: flex;
     align-items: center;
     justify-content: center;
 
-    height: calc(33.3vh - 10px);
-    background: $neutralColor;
+    background-image: url(../assets/equation-bg-long.jpg);
+    @media (max-width: 1400px) {
+      background-image: url(../assets/equation-bg-med.jpg);
+
+    }
+    @media (max-width: 900px) {
+      background-image: url(../assets/equation-bg-short.png);
+
+    }
+    background-size: 100% 100% ;
+    background-repeat: no-repeat;
+
     margin: 10px 0 0 0 ;
     padding: 10px;
-    flex: 1 1 200px ;
+    flex: 1 1 100px ;
     > li { //li
       margin: 0 20px;
     }
@@ -25,6 +34,30 @@
       align-items: center;
 
     }
+
+    .component {
+      &:not(:last-child)::after {
+        content: "";
+        background: url(../assets/times.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translate(50%, -50%);
+        z-index: 10;
+
+        }
+
+      &.no-after::after {
+        display: none;
+      }
+
+
+    }
+
 
     &--side1 {
 

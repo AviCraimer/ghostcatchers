@@ -1,8 +1,9 @@
 .player-actions {
   // display: flex;
   // align-items: center;
-  height: 22.2vh;
+  // height: 22.2vh;
   // width: 200px;
+  padding: 1px;
   button {
    padding: 0;
    margin: 0;
@@ -14,7 +15,6 @@
   min-width: 75%;
   display: flex;
   flex-grow: 1;
-  background-color: $neutralColor;
 }
 
 ul.flask-reserve, ul.ghost-reserve {
@@ -22,25 +22,43 @@ ul.flask-reserve, ul.ghost-reserve {
   width: 50%;
   align-items: center;
   justify-content: center;
-  padding: 5px;
+  padding: 30px;
   margin: 5px;
 
-  border-radius: 8px;
+  background-image: url(../assets/reserve-bg.png);
+  background-size: 100% 100% ;
+  background-repeat: no-repeat;
+
   > li {
     margin: 5px;
   }
 }
 
+
+
+
 .actionButtons {
-  // max-width: 200px;
   display: flex;
   justify-content: center;
-  .times-symbol {
-    margin-right: auto;
-  }
 
 
 }
+
+button{
+  background: transparent;
+  border: 2px solid transparent;
+
+  img {
+    max-width: 100px;
+    width: $sprite-width;
+  }
+}
+
+
+.active-button {
+  border: 2px solid $accentColor;
+}
+
 .flask-reserve {
 
 }

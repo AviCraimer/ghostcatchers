@@ -18,18 +18,64 @@ img {
   width: 100%;
 }
 
-main {
-  position: relative;
 
+.level-card {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s;
+
+  background: $lightColor;
+  padding: 10vw;
+  box-shadow:  0px 3px 15px rgba(0, 0, 0, 0.712);
+
+  min-height: 70vh;
+  min-width: 70vw;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -10;
+
+  h2 {
+    font-family: $bodyFont;
+    font-weight: 400;
+    font-size: 30px;
+    text-align: center;
+  }
+
+  p {
+    font-size: 20px;
+    font-family: $bodyFont;
+    line-height: 1.6;
+    }
 
 }
 
+.level-card.show {
+  display: block;
+  opacity: 1;
+  z-index: 20;
+}
 
-.components {
-  img { //components image
-    max-width: 100px;
-    width: $sprite-width;
+
+main {
+  position: relative;
+  height: 90vh;  //Note header has height set to 10vh
+  padding-bottom: 5vh;
+  display: flex;
+  flex-direction: column;
+  //Flex children
+  .player-actions {
+    flex:1 1 0;
   }
+  .reserve-areas {
+    flex: 1 1 0;
+  }
+  .equation {
+    flex: 2 1 0;
+  }
+
+}
 
 
 .component-placeholder, .term-placeholder  {
@@ -45,41 +91,18 @@ main {
   background:blue;
 }
 
- li { //.component
-   position: relative;
-   &:not(:last-child)::after {
-    content: "";
-    background: url(../assets/times.svg);
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translate(50%, -50%);
-    z-index: 10;
-    }
+.components { //  <ul>
 
-  &.no-after::after {
-    display: none;
-  }
- }
+}//End of .components  <ul>
 
-}
-
-button{
-  background: transparent;
-  border: none;
-
-  img {
+.component { //  <li>
+  position: relative;
+  img { //components image
     max-width: 100px;
     width: $sprite-width;
   }
-}
+}// end of .component  <li>
 
 .flipped img {
   transform: rotate(180deg);
-}
-
-.active-button {
-  background: rgb(133, 62, 121);
 }

@@ -12,12 +12,22 @@ const exampleData = [
 
 
 
-
+const currentLevel = 1;
 const levels = Array(10);
 
 levels[0]  = {
     name: "Level 1",
-    introText: "Basic addition canceling",
+    introText:
+    `<h2>Level 1 - Catch Freddie</h2>
+<p>Your pet ghost has escaped again. To catch him you have to get him all by himself.</p>
+<p>He is stuck between two Martha ghosts who are different colours?</p>
+<p>Can you figure out how to get Freddie alone?</p>`,
+    winText:
+    `<h2>Level 1 - Win!!</h2>
+<p>Great Job! </p>
+<p>Remember two ghosts with  opposite colours will transform into an empty flask.</p>
+<p>You can click an empty flask to make it disapper.</p>`,
+
     side1:
       [
         [ ghostDataObject('beth',-1,1) ],
@@ -182,6 +192,7 @@ function buildZeroFlask () {
 //END OF ELEMENT BUILDING FUNCTIONS
 
 
+
 // TESTING FUNCTIONS
 
 function whatType (identifier) {
@@ -342,6 +353,20 @@ function selectByData ($elements, dataKey, dataValue) {
    return $filteredElements;
 }
 
+function dectectWin() {
+  let noSiblings;
+  $('.equation img[alt="freddie"]').each((i,el) => {
+    const numberOfSiblings =  $(el).closest('.equation .term').siblings().length;
+    if (numberOfSiblings === 0) {
+      noSiblings = el;
+    }
+  });
+  // console.log(noSiblings);
+  return (noSiblings) ? noSiblings.closest('.terms') : false;
+  //It returns the side of the equation that won.
+}
+
+
 //END OF TESTING FUNCTIONS
 
 
@@ -460,7 +485,38 @@ function playerActionsRefresh (operation, sign, exponent) {
   }
 }
 
+function displayLevelCard(levelObj) {
+ $('.level-content').html(levelObj.introText);
+ $('.level-card').addClass('show');
+}
+
+function displayWin(levelObj) {
+ $('.level-content').html(levelObj.winText);
+ $('.level-card').addClass('show');
+}
+
 //EVENT HANDLING FUNCTIONS
+function levelSelect(event) {
+  let value;
+  let levelNumber;
+  let level;
+  if (event.target) {
+    value = event.target.value;
+    levelNumber = Number(value.split(" ")[1]);
+    level = levels[levelNumber-1];
+  } else {
+    level = event;
+  }
+  levelRefresh(level);
+  displayLevelCard(level);
+  flaskReserveRefresh("+", 1, 1);
+  ghostReserveRefresh("+", 1, 1);
+  sortableRefresh ()
+}
+
+
+
+
 function termUpdate(event) {
 
   const $termList = $(event.target).closest('.terms') ; //Selects the terms UL
@@ -634,7 +690,7 @@ function oneCancel (event) {
 //DOCUMENT READY FUNCTION
 $(function() {
   //Load Level 1
-  levelRefresh(levels[1]);
+  levelSelect(levels[0])
 
   //Preload negative images
   playerActionsRefresh('+',-1, 1);
@@ -643,7 +699,14 @@ $(function() {
   playerActionsRefresh('+',1, 1);
 
 
+  //Level Event Handlers
+  $('header select').change(function (event) {
+    levelSelect(event);
+  } );
 
+  $('.level-card').click(function () {
+    $(this).removeClass('show');
+  });
 
  // Player Action Button Events Handlers
   $('.plus').click(function () {

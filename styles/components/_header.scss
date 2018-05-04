@@ -1,6 +1,54 @@
 header {
   display: flex;
   align-items: center;
+  justify-content: center;
+  height: 10vh;
+  position: relative;
 
-  height: 11.1vh;
+
+  h1 {
+    color: $lightColor;
+    font-weight: 700;
+    font-size: 30px;
+
+    font-family: 'Ubuntu', sans-serif;
+    text-transform: uppercase;
+    // font-family: 'Trade Winds', cursive;
+
+   //Alternates
+    // font-family: 'Audiowide', cursive;
+    // font-family: 'Prosto One', cursive;
+    // font-family: 'Averia Serif Libre', cursive;
+    // font-family: 'Emilys Candy', cursive;
+    // font-family: 'Flavors', cursive;
+    // font-family: 'Chelsea Market', cursive;
+  }
+
+  form {
+    margin-right: 10px;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  select {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    font-family: $bodyFont;
+    font-size: 20px;
+    padding: 15px 30px;
+    background: $accentColor;
+    border: none;
+    &:focus {
+      border: none;
+    }
+
+    option {
+      border: none;
+
+    }
+  }
+
 }
