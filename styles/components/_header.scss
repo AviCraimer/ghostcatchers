@@ -8,10 +8,9 @@ header {
 
   h1 {
     color: $lightColor;
+    font-family: $headerFont;
     font-weight: 700;
     font-size: 30px;
-
-    font-family: 'Ubuntu', sans-serif;
     text-transform: uppercase;
     // font-family: 'Trade Winds', cursive;
 

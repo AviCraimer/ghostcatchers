@@ -15,12 +15,21 @@ const exampleData = [
 const currentLevel = 1;
 const levels = Array(10);
 
+
+const gameState = {
+  unresolvedComponentDrop: false
+}
+
+
+
+
+
+//LEVELS CONTENT
 levels[0]  = {
     name: "Level 1",
     introText:
     `<h2>Level 1 - Catch Freddie</h2>
-<p>Your pet ghost has escaped again. To catch him you have to get him all by himself.</p>
-<p>He is stuck between two Martha ghosts who are different colours?</p>
+<p>Your pet ghost has escaped again. To catch him you have to get him all by himself. He's stuck between two Beth ghosts who are different colours.</p>
 <p>Can you figure out how to get Freddie alone?</p>`,
     winText:
     `<h2>Level 1 - Win!!</h2>
@@ -387,8 +396,12 @@ function equationSideRefresh (termArray, sideNumber) {
 
 //Ensures that any newley created elements are sortable
 function sortableRefresh () {
-  $('.reserve').sortable();
-  $('.reserve .components').sortable();
+  $('.reserve').sortable({
+    // helper: "clone"
+  });
+  $('.reserve .components').sortable({
+
+  });
   $('.equation__terms-list').sortable({
     containment: "parent",
     distance: 5,
@@ -396,11 +409,49 @@ function sortableRefresh () {
   } );
   $('.equation .components').sortable({
       distance: 5,
+      items: "li:not(.unsortable)",
       update: function (event) {
          termUpdate(event);
          componentUpdate(event);
-        }
-    });
+
+        },
+      receive: function (event) {
+        const $dropList = $(event.target);
+        const $addedComponent = $(event.originalEvent.target).parent();
+        const typeAdded = $addedComponent.data("type");
+        const reserveSelector = (typeAdded === 'variable') ? '.ghost-reserve' : '.flask-reserve';
+
+        if ( gameState.unresolvedComponentDrop === false ) {
+          //Assign to component drop to true
+          gameState.unresolvedComponentDrop = true;
+          $dropList.sortable( "option", "disabled", true );
+          const $otherListsOnSide = $dropList.parent().siblings().find('.components');
+          const $otherListsOnOtherSide = $dropList.closest('.terms').siblings().find('.components');
+          const $listsToAddTo  = $otherListsOnSide.add( $otherListsOnOtherSide);
+          $listsToAddTo.addClass('animated infinite shake');
+
+          $('.reserve').each((i,el) => $(el).empty() );
+
+          const numberToAdd = $listsToAddTo.length;
+
+          for (let i = 0; i < $listsToAddTo.length; i++) {
+            const $clone = $addedComponent.clone(true);
+            $(reserveSelector).append($clone);
+          }//end for loop
+    }//END of if for component drop
+    else {
+      $dropList.removeClass('shake');
+      $dropList.sortable( "option", "disabled", true );
+      if ($(reserveSelector).children().length === 0) {
+        playerActionsRefresh('*',  $addedComponent.data('sign'), currentExponent() );
+        gameState.unresolvedComponentDrop = false;
+        $('.equation .components').sortable( "option", "disabled", false );
+        console.log("IF TRIGGERED",  $addedComponent.data('sign'));
+      }
+    }
+  }//end function
+
+    });//end sortable method on equation components lists
 }
 
 function levelRefresh (levelObj) {
@@ -677,6 +728,9 @@ function oneCancel (event) {
 
       //Check if terms additively cancel without the one.
       termUpdate({target: $sibling});
+      //Check for inverse cancelation
+
+      componentUpdate({target:  $sibling.parent() } );
     }, 500);
   }
 }

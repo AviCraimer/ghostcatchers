@@ -20,11 +20,11 @@
 ul.flask-reserve, ul.ghost-reserve {
   display: flex;
   width: 50%;
+  min-height: 20vh;
   align-items: center;
   justify-content: center;
   padding: 30px;
   margin: 5px;
-
   background-image: url(../assets/reserve-bg.png);
   background-size: 100% 100% ;
   background-repeat: no-repeat;

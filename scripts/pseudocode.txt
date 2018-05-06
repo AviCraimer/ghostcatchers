@@ -1,5 +1,88 @@
 
-TO DO
+
+
+
+
+Addotion
+On receive event in the equation side
+Set sortable to disabled for the side that received the new term
+
+Then set sortable to disabled for all Reserve items other than the one that was dropped
+
+It might be easier to make sortable disabled for the whole list, and then re enable it just for the one item. I'm not sure how to make individual item sortable or un sortable.
+
+Use the helper clone options so that there are unlimited numbers of the term
+
+Have an event listener detect the receive event in the other side of the equation.
+
+Re-enable normal sorting.
+
+
+
+
+
+4 multiplication
+
+Detect the drop of the component element
+  -On receive event in components list in the equation
+
+ Store the data object for that component in a variable
+
+Find the closest .componets ul, and disable sorting on that list
+  target.closets('.term');
+
+Disable sorting on all reserve items other than the one that was added
+  --So we need to
+
+  Added items: li:not:(.unsortable) to sorting options
+        --For components list, for current
+  Add class unsortable to all components in the reserve,
+    --and disable sorting option on the components list of the item that was already received.
+
+
+Use helper option clone to make it possible to sort multiple items
+
+With each receive event into the components list, disable sorting for that list.
+
+When all List have been sorted to re-enable normal sorting
+    --- how will I detect that all items have been sorted to?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Make areas not change size
 
