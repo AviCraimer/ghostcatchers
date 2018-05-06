@@ -20,7 +20,7 @@ Re-enable normal sorting.
 
 
 
-
+DONE -- Implemented Multiplication!!!
 4 multiplication
 
 Detect the drop of the component element
@@ -38,9 +38,6 @@ Disable sorting on all reserve items other than the one that was added
         --For components list, for current
   Add class unsortable to all components in the reserve,
     --and disable sorting option on the components list of the item that was already received.
-
-
-Use helper option clone to make it possible to sort multiple items
 
 With each receive event into the components list, disable sorting for that list.
 

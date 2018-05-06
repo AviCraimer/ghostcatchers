@@ -17,7 +17,9 @@ const levels = Array(10);
 
 
 const gameState = {
-  unresolvedComponentDrop: false
+  currentLevelIndex: 0,
+  unresolvedComponentDrop: false,
+  unresolvedTermDrop: false
 }
 
 
@@ -32,9 +34,8 @@ levels[0]  = {
 <p>Your pet ghost has escaped again. To catch him you have to get him all by himself. He's stuck between two Beth ghosts who are different colours.</p>
 <p>Can you figure out how to get Freddie alone?</p>`,
     winText:
-    `<h2>Level 1 - Win!!</h2>
-<p>Great Job! </p>
-<p>Remember two ghosts with  opposite colours will transform into an empty flask.</p>
+    `<h2>Level 1 - Great Job, You Win!</h2>
+<p>Click on any two similar ghosts with different colours to transform them into an empty flask.</p>
 <p>You can click an empty flask to make it disapper.</p>`,
 
     side1:
@@ -362,17 +363,21 @@ function selectByData ($elements, dataKey, dataValue) {
    return $filteredElements;
 }
 
-function dectectWin() {
-  let noSiblings;
+function detectWin() {
+  let $loneComponent = false;
   $('.equation img[alt="freddie"]').each((i,el) => {
-    const numberOfSiblings =  $(el).closest('.equation .term').siblings().length;
-    if (numberOfSiblings === 0) {
-      noSiblings = el;
+    $component = $(el).parent();
+    if ($component.data("sign") === 1 && $component.data("exponent") === 1) {
+      const numberOfComponentSiblings =  $component.siblings().length;
+      const numberOfTermSiblings = $component.closest('.term').siblings().length;
+      if (numberOfComponentSiblings === 0 && numberOfTermSiblings === 0) {
+        $loneComponent = $component;
+      }
+
     }
   });
-  // console.log(noSiblings);
-  return (noSiblings) ? noSiblings.closest('.terms') : false;
-  //It returns the side of the equation that won.
+  //Returns the lone componet if there is one, otherwise, returns false.
+  return $loneComponent;
 }
 
 
@@ -397,59 +402,31 @@ function equationSideRefresh (termArray, sideNumber) {
 //Ensures that any newley created elements are sortable
 function sortableRefresh () {
   $('.reserve').sortable({
-    // helper: "clone"
+
   });
   $('.reserve .components').sortable({
 
   });
+
   $('.equation__terms-list').sortable({
     containment: "parent",
     distance: 5,
-    update: termUpdate
+    update: function () {
+      termUpdate(event),
+      winUpdate();
+    } ,
+    receive: termDrop
   } );
+
   $('.equation .components').sortable({
       distance: 5,
       items: "li:not(.unsortable)",
       update: function (event) {
          termUpdate(event);
          componentUpdate(event);
-
+         winUpdate();
         },
-      receive: function (event) {
-        const $dropList = $(event.target);
-        const $addedComponent = $(event.originalEvent.target).parent();
-        const typeAdded = $addedComponent.data("type");
-        const reserveSelector = (typeAdded === 'variable') ? '.ghost-reserve' : '.flask-reserve';
-
-        if ( gameState.unresolvedComponentDrop === false ) {
-          //Assign to component drop to true
-          gameState.unresolvedComponentDrop = true;
-          $dropList.sortable( "option", "disabled", true );
-          const $otherListsOnSide = $dropList.parent().siblings().find('.components');
-          const $otherListsOnOtherSide = $dropList.closest('.terms').siblings().find('.components');
-          const $listsToAddTo  = $otherListsOnSide.add( $otherListsOnOtherSide);
-          $listsToAddTo.addClass('animated infinite shake');
-
-          $('.reserve').each((i,el) => $(el).empty() );
-
-          const numberToAdd = $listsToAddTo.length;
-
-          for (let i = 0; i < $listsToAddTo.length; i++) {
-            const $clone = $addedComponent.clone(true);
-            $(reserveSelector).append($clone);
-          }//end for loop
-    }//END of if for component drop
-    else {
-      $dropList.removeClass('shake');
-      $dropList.sortable( "option", "disabled", true );
-      if ($(reserveSelector).children().length === 0) {
-        playerActionsRefresh('*',  $addedComponent.data('sign'), currentExponent() );
-        gameState.unresolvedComponentDrop = false;
-        $('.equation .components').sortable( "option", "disabled", false );
-        console.log("IF TRIGGERED",  $addedComponent.data('sign'));
-      }
-    }
-  }//end function
+      receive: componentDrop
 
     });//end sortable method on equation components lists
 }
@@ -547,29 +524,22 @@ function displayWin(levelObj) {
 }
 
 //EVENT HANDLING FUNCTIONS
-function levelSelect(event) {
-  let value;
-  let levelNumber;
-  let level;
-  if (event.target) {
-    value = event.target.value;
-    levelNumber = Number(value.split(" ")[1]);
-    level = levels[levelNumber-1];
-  } else {
-    level = event;
-  }
+function levelSelect(levelIndex) {
+  const level =  levels[levelIndex];
+  gameState.currentLevelIndex = levelIndex;
+
+  $('header select').val(`Level ${levelIndex + 1}`);
   levelRefresh(level);
   displayLevelCard(level);
-  flaskReserveRefresh("+", 1, 1);
-  ghostReserveRefresh("+", 1, 1);
-  sortableRefresh ()
+  playerActionsRefresh("+", 1, 1);
+
+
 }
 
-
-
-
+//Used for the update even in  '.equation .terms'
+//Also used in the click event for cancelling zeroed terms.
+//And Used in the click event for cancelling one components
 function termUpdate(event) {
-
   const $termList = $(event.target).closest('.terms') ; //Selects the terms UL
   const testResults =  compareAdjacentElements($termList.children(), additiveCancellationTest);
 
@@ -588,6 +558,8 @@ function termUpdate(event) {
 }
 
 
+//Used for the update even in  '.equation .components'
+//And Used in the click event for cancelling one components
 function componentUpdate (event) {
   $componentsList = $(event.target);
   const testResults = compareAdjacentElements($componentsList.children(), inverseTest )
@@ -607,7 +579,7 @@ function componentUpdate (event) {
   });
 }
 
-//Cancels components where 1-flask is being multiplied by other components
+//Cancels components where two inverse components are next to each other, replaces them with a one-flask component.
 function componentCancel(event) {
   const $componentLi = $(event.currentTarget);
   let $remove = $componentLi;
@@ -653,6 +625,7 @@ function componentCancel(event) {
 }
 
 //Cancels like terms that have opposite signs
+//Replaces tehm with a zero-flask term
 function termCancel (event) {
   const $termLi = $(event.currentTarget);
   let $remove = $termLi;
@@ -735,16 +708,162 @@ function oneCancel (event) {
   }
 }
 
+//Used for the receive event in '.equation .terms' sortable.
+//This event handles adding term to boths sides of an equation.
+function termDrop(event) {
+  //.terms list that the new term  was received by (side of the equation)
+  const $dropList = $(event.target);
+  const $otherSideList = $dropList.siblings();
+
+  //The componet and term just added to the list
+  //Note: event.originalEvent is the the img element
+  const $addedComponent = $(event.originalEvent.target).parent();
+  const $addedTerm =  $addedComponent.closest('.term');
+
+  //The type of the component in the added term and the selector for its corresponding reserve
+  const typeAdded = $addedComponent.data("type");
+  const reserveSelector = (typeAdded === 'variable') ? '.ghost-reserve' : '.flask-reserve';
+
+  //Using gameState property to decide what to do
+  if ( gameState.unresolvedTermDrop === false ) {
+
+    //Assign unresolved component drop to true.
+    gameState.unresolvedTermDrop = true;
+
+    //Disable sorting on the droplist
+    $dropList.sortable( "option", "disabled", true );
+
+      //Add shake animation to .term <li> elements in the other side of the equation
+    $otherSideList.children().addClass('animated infinite shake');
+
+    //Empty both reserves
+    $('.reserve').each((i,el) => $(el).empty() );
+
+    //Add a clone of dropped term to relevant reserve
+    //The clone method is called with true argument in order to copy data and event handlers
+    const $clone = $addedTerm.clone(true);
+    ////Add cloned component to the appropriate reserve
+    $(reserveSelector).append($clone);
+  }//END of if for term drop
+  else {
+    //During an unresolved term drop
+
+    //Remove animation and disable sorting
+    $dropList.children().removeClass('shake');
+    $dropList.sortable( "option", "disabled", true );
 
 
-//END OF PAGE UPDATING FUNCTIONS
+    //Refresh the reserves
+    playerActionsRefresh('+',  $addedComponent.data('sign'), $addedComponent.data('exponent') );
+
+    // Re-set game state
+    gameState.unresolvedTermDrop = false;
+
+    // Enable sorting on equation components lists.
+    $('.equation .terms').sortable( "option", "disabled", false );
+  }
+
+
+}//End function
+
+//Used for the receive event in '.equation .components' sortable.
+//This event handles multiplying all terms in the equation by an added component.
+function componentDrop  (event) {
+  //components list that the componet was received by
+  const $dropList = $(event.target);
+
+  //The component just added to the list
+  const $addedComponent = $(event.originalEvent.target).parent();
+
+  //The type of the component added and the selector for its corresponding reserve
+  const typeAdded = $addedComponent.data("type");
+  const reserveSelector = (typeAdded === 'variable') ? '.ghost-reserve' : '.flask-reserve';
+
+  //Using gameState property to decide what to do
+  if ( gameState.unresolvedComponentDrop === false ) {
+
+    //Assign unresolved component drop to true.
+    gameState.unresolvedComponentDrop = true;
+
+    //Disable sorting on the droplist
+    $dropList.sortable( "option", "disabled", true );
+
+    //Get a jquery selection of all the other componets lists
+    const $otherListsOnSide = $dropList.parent().siblings().find('.components');
+    const $otherListsOnOtherSide = $dropList.closest('.terms').siblings().find('.components');
+    const $listsToAddTo  = $otherListsOnSide.add( $otherListsOnOtherSide);
+
+    //Add shake animation to these lists
+    $listsToAddTo.addClass('animated infinite shake');
+
+    //Empty both reserves
+    $('.reserve').each((i,el) => $(el).empty() );
+
+    //Number of copies of the component to add to resever
+    const numberToAdd = $listsToAddTo.length;
+
+    //Add a clone of dropped component to reserve for each other component in the equation
+    for (let i = 0; i < $listsToAddTo.length; i++) {
+      //The clone method is called with true argument in order to copy data and event handlers
+      const $clone = $addedComponent.clone(true);
+      ////Add cloned component to the appropriate reserve
+      $(reserveSelector).append($clone);
+    }//end for loop
+}//END of if for component drop
+  else {
+  //During an unresolved component drop, with each successive drop
+
+  //Remove animation and disable sorting
+  $dropList.removeClass('shake');
+  $dropList.sortable( "option", "disabled", true );
+
+    //When there are no more componets left to drop in the reserve.
+    if ($(reserveSelector).children().length === 0) {
+
+      //Refresh the reserves
+      playerActionsRefresh('*',  $addedComponent.data('sign'), $addedComponent.data('exponent') );
+
+      // Re-set game state
+      gameState.unresolvedComponentDrop = false;
+
+      // Enable sorting on equation components lists.
+      $('.equation .components').sortable( "option", "disabled", false );
+    }
+  }
+}//end function
+
+
+function winUpdate () {
+  //Waits a before checking for win. To allow animations to resolve.
+  setTimeout(() => {
+      const win = detectWin();
+
+    //Checks if win came back truthy
+    if (win) {
+      const $winComponent = win;
+      $winComponent.addClass('tada animated infinite');
+
+      //Display winText
+      const winText =  levels[gameState.currentLevelIndex].winText;
+      $('.level-card').addClass('show win').children().html(winText);
+    }
+
+
+
+  }, 550);
+
+
+}
+
+
+//END OF EVENT HANDLING FUNCTIONS
 
 
 
 //DOCUMENT READY FUNCTION
 $(function() {
   //Load Level 1
-  levelSelect(levels[0])
+  levelSelect(0);
 
   //Preload negative images
   playerActionsRefresh('+',-1, 1);
@@ -755,11 +874,25 @@ $(function() {
 
   //Level Event Handlers
   $('header select').change(function (event) {
-    levelSelect(event);
+    value = event.target.value;
+    //Get the level number from the select value string
+    levelNumber = Number(value.split(" ")[1]);
+    //Subtract 1 from level number to get level index
+    levelSelect(levelNumber - 1);
   } );
 
   $('.level-card').click(function () {
     $(this).removeClass('show');
+    if ( $(this).hasClass('win') ) {
+      $(this).removeClass('win');
+
+      //Checks if you are on the last level, if so, returns you to the first level. Eventually I can have something special happen when you win the last level.
+      const nextLevelIndex = (gameState.currentLevelIndex + 1 === levels.length) ? 0  : gameState.currentLevelIndex + 1 ;
+
+      levelSelect( nextLevelIndex );
+
+
+    }
   });
 
  // Player Action Button Events Handlers
@@ -782,11 +915,12 @@ $(function() {
       termCancel(event);
     }
     zeroCancel(event);
+    winUpdate();
   });
 
   $('.equation').on('click', '.component', function (event) {
     oneCancel(event);
-
+    winUpdate();
     if ($(this).hasClass('swing') ) {
       componentCancel(event);
     }

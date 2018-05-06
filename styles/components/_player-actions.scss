@@ -47,6 +47,8 @@ ul.flask-reserve, ul.ghost-reserve {
 button{
   background: transparent;
   border: 2px solid transparent;
+  -webkit-appearance: none;
+  // &:focus {outline:0;}
 
   img {
     max-width: 100px;
