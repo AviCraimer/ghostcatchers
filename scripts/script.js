@@ -675,7 +675,7 @@ function sortableRefresh () {
   $('.equation__terms-list').sortable({
     containment: "parent",
     distance: 5,
-    update: function () {
+    update: function (event) {
       termUpdate(event),
       winUpdate();
     } ,
