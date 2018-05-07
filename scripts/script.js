@@ -34,6 +34,7 @@ levels[0]  = {
     name: "Level 1",
     introText:
     `<h2>Level 1 - Catch Freddie</h2>
+    <div class="imgWrap" title="Freddie"><img src="assets/freddie-positive.svg" alt=""></div>
 <p>Your pet ghost has escaped again. To catch him you have to get him all by himself. He's stuck between two Beth ghosts who are different colours.</p>
 <p>Can you figure out how to get Freddie alone?</p>`,
     winText:
@@ -283,7 +284,7 @@ levels[9] = {
 levels[10] = {
   name: "Level 11",
   introText: `<h2>Secret Bonus Level - Freddie Learns to Teleport</h2>
-             <p>Freddie went went and got himself stuck upside down. It's up to you to spin him right round. </p>`,
+             <p>Freddie went and got himself stuck upside down. It's up to you to spin him right round. </p>`,
   winText: `<h2>You Have Beaten the Game!</h2>
             <p>Good for you, you are officially just as smart as a grade 8 algebra student.</p>`,
   side1:
