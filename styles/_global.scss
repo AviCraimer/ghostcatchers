@@ -71,7 +71,12 @@ img {
   .imgWrap {
     display: block;
     float: right;
-    width: 70px;
+    width: 100px;
+    margin-left: 10px;
+    margin-top: 6px;
+    @media (min-width: 1500px) {
+      margin-right: 30px;
+    }
   }
 
 }
@@ -115,23 +120,6 @@ main {
 
 }
 
-
-.component-placeholder, .term-placeholder  {
-  visibility: visible;
-}
-
-.component-placeholder  {
-  background: red;
-
-}
-
-.term-placeholder  {
-  background:blue;
-}
-
-.components { //  <ul>
-
-}//End of .components  <ul>
 
 .component { //  <li>
   position: relative;

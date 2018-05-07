@@ -465,9 +465,9 @@ function activeOperation () {
 
 function compareComponents (component1, component2) { //Takes two html component elements
   const data1 = $(component1).data();
-  console.log("data1",data1);
+
   const data2 = $(component2).data();
-  console.log("data2",data2);
+
 
  return {
     //True if the identifiers match, it is not sensitive to differences in sign or exponent.
@@ -571,12 +571,12 @@ function compareAdjacentElements ($siblings, testFunction ) {
   const results = [];
   for (let i = 0; i < $siblings.length - 1; i++) {
     const firstElement  = $siblings[i];
-    // console.log("firstElement", firstElement);
+
     const secondElement  = $siblings[i+1];
-    // console.log("secondElement", secondElement);
+
 
     const test = testFunction(firstElement, secondElement);
-    console.log(test);
+
     const $pair = $(firstElement).add(secondElement);
     results.push(
       {test: test,
@@ -945,9 +945,9 @@ function zeroCancel (event) {
 
 
     setTimeout(() => {
-      console.log("about to remove", $termLi);
+
       $termLi.remove();
-      console.log("after remove", $termLi);
+
     }, 500);
   }
 }
@@ -1107,7 +1107,7 @@ function winUpdate () {
   //Waits a before checking for win. To allow animations to resolve.
   setTimeout(() => {
       const win = detectWin();
-      console.log(win);
+
     //Checks if win came back truthy
     if (win) {
       const $winComponent = win;
