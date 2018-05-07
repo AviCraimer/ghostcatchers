@@ -4,6 +4,8 @@ $sprite-width: calc(1.3846rem + 6.154vw);
 //FONTS
 $headerFont:  'Ubuntu', sans-serif;
 
+/*Font is 3 REMs at 1920px screen width and 2 REMs at 450px screen width*/
+$headerFontSize: calc(1.6939rem + 0.680vw);
 
 //Colors
 

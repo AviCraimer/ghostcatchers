@@ -32,6 +32,10 @@ ul.flask-reserve, ul.ghost-reserve {
   > li {
     margin: 5px;
   }
+  @media (max-width: 900px) {
+    width: 70%;
+
+  }
 }
 
 

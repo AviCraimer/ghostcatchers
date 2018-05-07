@@ -4,23 +4,20 @@ header {
   justify-content: center;
   height: 10vh;
   position: relative;
-
+  @media (max-width: 650px) {
+   justify-content: left;
+   padding-left: 10px;
+  }
 
   h1 {
     color: $lightColor;
     font-family: $headerFont;
     font-weight: 700;
-    font-size: 30px;
+    font-size: $headerFontSize;
     text-transform: uppercase;
-    // font-family: 'Trade Winds', cursive;
 
-   //Alternates
-    // font-family: 'Audiowide', cursive;
-    // font-family: 'Prosto One', cursive;
-    // font-family: 'Averia Serif Libre', cursive;
-    // font-family: 'Emilys Candy', cursive;
-    // font-family: 'Flavors', cursive;
-    // font-family: 'Chelsea Market', cursive;
+
+
   }
 
   form {

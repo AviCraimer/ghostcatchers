@@ -38,7 +38,7 @@
     .component {
       &:not(:last-child)::after {
         content: "";
-        background: url(../assets/times.png);
+        background: url(../assets/times-transparent.png);
         background-size: cover;
         background-repeat: no-repeat;
         width: 20px;

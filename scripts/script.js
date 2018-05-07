@@ -101,8 +101,9 @@ levels[2] = {
 levels[3] = {
   name: "Level 4",
   introText: `<h2>Level 4 - Day to Night</h2>
-  <p>Woah, can you say colour clash!  Sometimes to get rid of bright coloured ghost you need to add a dark ghost to board.</p>
-  <p>Click the switch colors button <button class="positive-negative"><img src="assets/negative.png" alt=""></button> to change colours of items in your reserve.</p>`,
+  <div class="imgWrap" title="Switch Colours"><img src="assets/negative.png" alt=""></div>
+  <p>Woah, can you say colour clash!  Sometimes to get rid of a bright coloured ghost you need to add a dark ghost to the board.</p>
+  <p>Click the switch colors button to change the colours of items in your reserve.</p>`,
   winText: `<h2>You Win!</h2>
   <p> Think carefully about the colour of the ghost before adding it to the board. Make sure it will help you get Freddie by himself.</p>`,
   side1:
@@ -152,8 +153,8 @@ levels[4] = {
 levels[5] = {
   name: "Level 6",
   introText: `<h2>Level 6 - A Little Treat for Your Ghosts Buddies</h2>
-  <p>Ghosts love ecolplasm. They drink it in flasks like soda.</p>
-  <p>If you see a single green flask glued to a ghost or a group you can click it to make it disapeer. No such let with flasks that come in twos or threes or fours. Even the thirstiest ghost can't drink more than one flask at a time.</p>`,
+  <p>Ghosts love ectoplasm. They drink it in flasks like soda.</p>
+  <p>If you see a single green flask glued to a ghost or a group you can click it to make it disapear. No such luck with flasks that come in twos or threes or fours. Even the thirstiest ghost can't drink more than one flask at a time.</p>`,
   winText: `<h2>You Win!</h2>
   <p>You made those thirsty ghosts very happy.</p>`,
   side1:
@@ -1007,7 +1008,7 @@ function termDrop(event) {
 
     //Add a clone of dropped term to relevant reserve
     //The clone method is called with true argument in order to copy data and event handlers
-    const $clone = $addedTerm.clone(true);
+    const $clone = $addedTerm.clone(true, true);
     ////Add cloned component to the appropriate reserve
     $(reserveSelector).append($clone);
   }//END of if for term drop
@@ -1070,7 +1071,7 @@ function componentDrop  (event) {
     //Add a clone of dropped component to reserve for each other component in the equation
     for (let i = 0; i < $listsToAddTo.length; i++) {
       //The clone method is called with true argument in order to copy data and event handlers
-      const $clone = $addedComponent.clone(true);
+      const $clone = $addedComponent.clone(true, true);
       ////Add cloned component to the appropriate reserve
       $(reserveSelector).append($clone);
     }//end of for loop
