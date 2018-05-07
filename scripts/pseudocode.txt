@@ -1,4 +1,9 @@
 
+Touch Screen
+--Clicking to cancel items is not working well. I want to try making the click handlers for term and component cancel be attached to the img rather than the .component or .term li.
+  --This will require some re-factoring of the event handling functions involved, but I don't see any obstacle in principle.
+
+
 KNOWN BUG
 
 --For some unknown reason, the component drop is not working as intented. Sorting into .components lists works for some lists but not others. I've tried using console to set them to sortable and enabled and this doesn't effect them. I don't know what the problem is, it's very frustrating since I was so close to having everything work out as planned, but I guess I just have to accept it for now.

@@ -1188,20 +1188,45 @@ $(function() {
   });
 
   //Equation Event Handlers
-  $('.equation').on('click', '.term', function (event) {
-    if ($(this).hasClass('bounce')) {
-      termCancel(event);
-    }
-    zeroCancel(event);
-    winUpdate();
-  });
+  // $('.equation').on('click', '.term', function (event) {
+  //   if ($(this).hasClass('bounce')) {
+  //     termCancel(event);
+  //   }
+  //   zeroCancel(event);
+  //   winUpdate();
+  // });
 
-  $('.equation').on('click', '.component', function (event) {
-    oneCancel(event);
-    winUpdate();
-    if ($(this).hasClass('swing') ) {
-      componentCancel(event);
+  // $('.equation').on('click', '.component', function (event) {
+  //   oneCancel(event);
+  //   winUpdate();
+  //   if ($(this).hasClass('swing') ) {
+  //     componentCancel(event);
+  //   }
+  // });
+
+
+
+  $('.equation').on('click', 'img', function (event) {
+
+    const $this =  $(this);
+
+    //Term Functions
+    const $term = $this.closest('.term');
+    const termEvent = {
+      currentTarget: $term
     }
+    if ($term.hasClass('bounce')) {
+      termCancel(termEvent);
+    }
+    zeroCancel(termEvent);
+
+    //Componet functions
+    oneCancel({currentTarget: $this.parent()  } );
+    if ($this.parent().hasClass('swing') ) {
+      componentCancel({currentTarget: $this.parent()  });
+    }
+    //Check for win
+    winUpdate();
   });
 
 });//END OF DOCUMENT READY FUNCTION
