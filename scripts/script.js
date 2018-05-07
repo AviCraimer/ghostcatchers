@@ -1,6 +1,7 @@
 //GLOBAL VARIABLES
 
-const ghosts =  ["freddie", "marsha", "beth", "bjorn", "pat"];
+// const ghosts =  ["freddie", "marsha", "beth", "bjorn", "pat"];
+const ghosts =  ["freddie", "marsha", "beth", "bjorn"];
 
 
 //Used for testing
@@ -27,6 +28,8 @@ const gameState = {
 
 
 //LEVELS CONTENT
+
+//Level 1
 levels[0]  = {
     name: "Level 1",
     introText:
@@ -34,7 +37,7 @@ levels[0]  = {
 <p>Your pet ghost has escaped again. To catch him you have to get him all by himself. He's stuck between two Beth ghosts who are different colours.</p>
 <p>Can you figure out how to get Freddie alone?</p>`,
     winText:
-    `<h2>Level 1 - Great Job, You Win!</h2>
+    `<h2>You Win!</h2>
 <p>Click on any two similar ghosts with different colours to transform them into an empty flask.</p>
 <p>You can click an empty flask to make it disapper.</p>`,
 
@@ -44,39 +47,275 @@ levels[0]  = {
         [ ghostDataObject('freddie',1,1) ],
         [ ghostDataObject('beth',1,1) ]
       ],
-    side2: [ [flaskDataObject(3,1), ghostDataObject('bjorn',1,-1)] ]
+    side2: [ [flaskDataObject(3,1), ghostDataObject('beth',1,-1)] ]
   }
 
+
+// Level 2
+// 	--More cancelling, including cancelling bigger terms
+// 	--freddie on other side of the equation.
 levels[1] = {
-  name: "Level 1",
-  introText: "Cancelling ones",
+  name: "Level 2",
+  introText: `<h2>Level 2 - Too Many Freddies</h2>
+  <p>Freddie is on the loose again. This time he's split up into several copies, changed colours, and gotten glued to a pair of Bjorn ghosts. What a mess!</p>
+  <p>Can you find a way to get just one Freddie?</p>`,
+  winText: `<h2>You Win!</h2>
+  <p>You can cancel out multiple ghosts at once if they have the same ghost types with opposite colors.</p>`,
   side1:
     [
-      [ ghostDataObject('marsha', 1, 1) ],
-      [ ghostDataObject('freddie', 1, 1), flaskDataObject(1,1)],
-      [ ghostDataObject('marsha', -1, 1), flaskDataObject(1,1)]
+      [ghostDataObject('marsha', 1,-1)  ], //term1
+      [ghostDataObject('beth', 1,1)  ], //term1
+      [  flaskDataObject(-1,1) ], //term2
+      [ ghostDataObject('marsha',-1,-1) ] //term3
     ],
-  side2: [ [ghostDataObject('pat',1,1)] ]
+  side2:
+    [
+      [ghostDataObject('freddie', -1, 1), ghostDataObject('bjorn', 1,-1) ], //term1
+      [ ghostDataObject('freddie', 1, 1)  ], //term2
+      [ghostDataObject('freddie', 1, 1), ghostDataObject('bjorn', 1,-1) ] //term3
+    ]
+};
+
+
+// Level 3
+// 	--adding to both sides
+levels[2] = {
+  name: "Level 3",
+  introText: `<h2>Level 3 - A Little Over Here, a Little Over There</h2>
+  <p>This time Beth and Freddie went out just the two of them. Luckily, you can add an opposite coloured Beth to the game  board from your reserve area (the top row).</p>
+  <p>Be warned! Every time you add something to one half of the board, you  have to add the same thing to the other half.</p>`,
+  winText: `<h2>You Win!</h2>
+  <p>Amazing!!! You are starting to become an expert ghost catcher. You can always add something the board, but be careful not to abuse your new power. Adding the wrong item to the board will make it harder to win.</p>`,
+  side1:
+    [
+      [ ghostDataObject('freddie', 1, 1) ], //term1
+      [ ghostDataObject('beth', -1, 1) ] //term2
+    ],
+  side2:
+    [
+      [flaskDataObject(3,1) ] //term1
+    ]
+};
+// Level 4
+// 	Bigger adding to both sides
+levels[3] = {
+  name: "Level 4",
+  introText: `<h2>Level 4 - Day to Night</h2>
+  <p>Woah, can you say colour clash!  Sometimes to get rid of bright coloured ghost you need to add a dark ghost to board.</p>
+  <p>Click the switch colors button <button class="positive-negative"><img src="assets/negative.png" alt=""></button> to change colours of items in your reserve.</p>`,
+  winText: `<h2>You Win!</h2>
+  <p> Think carefully about the colour of the ghost before adding it to the board. Make sure it will help you get Freddie by himself.</p>`,
+  side1:
+    [
+      [ghostDataObject('freddie', 1, 1) ], //term1
+      [ghostDataObject('marsha', 1, 1)   ], //term2
+      [ghostDataObject('beth', 1, 1 ) ], //term3
+      [flaskDataObject(4,1) ] //term4
+    ],
+  side2:
+    [
+      [flaskDataObject(2,-1), ghostDataObject('bjorn', 1,1) ] //term1
+    ]
+};
+
+
+// Level 5
+//Practice switching back and forth
+
+levels[4] = {
+  name: "Level 5",
+  introText: `<h2>Level 5 - Back and Forth</h2>
+  <p>Being a ghost catcher keeps you busy from morning 'till night!  To win this level, switch back and forth from light to dark colours.</p>
+  <p>Don't forget to watch for opposites already on the game board!</p>`,
+  winText: `<h2>You Win!</h2>
+  <p>You got this colour thing all wrapped up! </p>`,
+  side1:
+    [
+      [ghostDataObject('marsha', 1, 1)] //term1
+    ],
+  side2:
+    [
+      [ghostDataObject( 'bjorn',-1,1) ], //term
+      [ ghostDataObject( 'beth',1,1) ], //term
+      [ flaskDataObject(-3,1) ,  ghostDataObject('bjorn', 1, 1 )  ], //term
+      [ ghostDataObject('freddie',1,1 )  ], //term
+      [flaskDataObject(-3,1),  ghostDataObject('bjorn', -1, 1 )  ] //term
+    ]
+};
+
+
+// Level 6
+
+// 	--Cancelling 1s
+
+
+levels[5] = {
+  name: "Level 6",
+  introText: `<h2>Level 6 - A Little Treat for Your Ghosts Buddies</h2>
+  <p>Ghosts love ecolplasm. They drink it in flasks like soda.</p>
+  <p>If you see a single green flask glued to a ghost or a group you can click it to make it disapeer. No such let with flasks that come in twos or threes or fours. Even the thirstiest ghost can't drink more than one flask at a time.</p>`,
+  winText: `<h2>You Win!</h2>
+  <p>You made those thirsty ghosts very happy.</p>`,
+  side1:
+    [
+      [ ghostDataObject('beth', 1, 1), flaskDataObject(1,1) ],
+      [ ghostDataObject('freddie', 1, 1), flaskDataObject(1,1)],
+      [ flaskDataObject(1,1), ghostDataObject('marsha', -1, 1) ]
+    ],
+  side2:
+    [
+      [  ghostDataObject('beth',1,1), flaskDataObject(-1,1) ]
+    ]
+};
+
+
+// Level 7
+//   --Cancelling flipped
+
+
+levels[6] = {
+  name: "Level 7",
+  introText: `<h2>Level 7 - The Upside Down </h2>
+  <p>You might have noticed that ghosts like to stick together, litterally! They also flip upside down dyfing gravity (yes, ghosts are weird).</p>
+
+  <p>When two ghost of the same type are flipped in opposite directions, you can tap to transform them. What do they become?</p>`,
+  winText: `<h2>You Win!</h2>
+  <p>Wow, those topsey turvey ghosts become a single full flask. Who's drinking who now?  </p>`,
+  side1:
+    [
+      [ ghostDataObject('freddie', 1, 1), ghostDataObject('marsha', 1, -1), flaskDataObject(1,1)  , ghostDataObject('marsha', 1, 1)   ], //term1
+      [ghostDataObject('bjorn', 1, 1),ghostDataObject('freddie', 1, 1),  flaskDataObject(1,1) , ghostDataObject('freddie', 1, -1),  ghostDataObject('bjorn', 1, -1) ] //term2
+
+    ],
+  side2:
+    [
+      [flaskDataObject(2,1) ], //term1
+    ]
+};
+
+
+// Level 8
+// 	--Multiplying all terms
+
+levels[7] = {
+  name: "Level 8",
+  introText: `<h2>Level 8 - Ghosts Everywhere!</h2>
+  <div class="imgWrap" title="Multiply"><img src="assets/times.png" alt=""></div>
+  <p>Click the dot botton to glue a ghost from your reserve into a group on the game board.</p>
+
+  <p> When you glue a ghost into one group, you must put the same ghost into every other group.</p>
+  `,
+  winText: `<h2>You Win!</h2>
+    <p>That's a lot of ghosts. Sometimes, you just gotta throw your ghost around. </p>
+  `,
+  side1:
+    [
+      [
+        ghostDataObject('freddie', 1, 1),
+        ghostDataObject('beth', 1, -1),
+        ghostDataObject('bjorn', 1, -1),
+        ghostDataObject('marsha', 1, -1)
+
+      ] //term1
+
+    ],
+  side2:
+    [
+      [flaskDataObject(-3,1) ], //term1
+      [flaskDataObject(1,1)], //term2
+      [flaskDataObject(2,-1)] //term3
+    ]
+};
+
+// Level 9
+// 	--Flipping.
+
+levels[8] = {
+  name: "Level 9",
+  introText: `<h2>Level 9 - Flipping Out</h2>
+              <div class="imgWrap" title="Flip"><img src="assets/flip.png" alt=""></div>
+              <p>Sometime the thing you need to add is just not the right way round. Click the flip button to switch the direction of your reserves.</p>
+              <p>Don't forget to switch to dot mode to glue into groups.</p>`,
+  winText: `<h2>You Win!</h2>
+            <p>You're a ghost catching ninja, somersaulting your way to victory!</p>`,
+  side1:
+    [
+      [flaskDataObject(-4,1) ], //term1
+      [ ghostDataObject('marsha', 1, -1) ] //term2
+
+    ],
+  side2:
+    [
+      [
+        ghostDataObject('freddie', 1, 1),
+        ghostDataObject('beth', 1, 1),
+        flaskDataObject(2,1),
+        ghostDataObject('bjorn', 1, -1)
+      ] //term
+    ]
+};
+
+
+//Level 10
+// 	--Addition and multiplication
+levels[9] = {
+  name: "Level 10",
+  introText: `<h2>Level 10 - One Flask to Rule Them All</h2>
+  <p>Now it time to prove your mastery of the ghost catching arts.</p>
+  <p>Add, glue, colour switch, and flip. You'll need it all for this one! </p>`,
+  winText: `<h2>You Win!</h2>
+  <p>You are ready...for the secret bonus round!</p>`,
+  side1:
+    [
+      [flaskDataObject(3,-1),  ghostDataObject('marsha', -1, 1) ], //term1
+      [ ghostDataObject('freddie', 1, 1), ghostDataObject('marsha', -1, 1)  ], //term2
+      [ghostDataObject('marsha', -1, 1), ghostDataObject('bjorn', -1, 1)   ] //term3
+    ],
+  side2:
+    [
+      [flaskDataObject(1,1) ], //term1
+    ]
+};
+
+//Level 11
+// bonus
+levels[10] = {
+  name: "Level 11",
+  introText: `<h2>Secret Bonus Level - Freddie Learns to Teleport</h2>
+             <p>Freddie went went and got himself stuck upside down. It's up to you to spin him right round. </p>`,
+  winText: `<h2>You Have Beaten the Game!</h2>
+            <p>Good for you, you are officially just as smart as a grade 8 algebra student.</p>`,
+  side1:
+    [
+
+      [ghostDataObject('bjorn', -1, -1), flaskDataObject(4, 1,1)  ] //term2
+
+    ],
+  side2:
+    [
+      [ghostDataObject('freddie', 1, -1), flaskDataObject(2,-1,1) ] //term1
+    ]
 };
 
 
 //Template
-levels[9] = {
-  name: "Level 1",
-  introText: "Cancelling ones",
-  side1:
-    [
-      [ ], //term1
-      [ ], //term2
-      [ ] //term3
-    ],
-  side2:
-    [
-      [], //term1
-      [], //term2
-      [] //term3
-    ]
-};
+// levels[] = {
+//   name: "Level 1",
+//   introText: ``,
+//   winText: ``,
+//   side1:
+//     [
+//       [ ], //term1
+//       [ ], //term2
+//       [ ] //term3
+//     ],
+//   side2:
+//     [
+//       [], //term1
+//       [], //term2
+//       [] //term3
+//     ]
+// };
 
 
 
@@ -364,16 +603,37 @@ function selectByData ($elements, dataKey, dataValue) {
 }
 
 function detectWin() {
+  //Ensures there cannot be a win in the middle of an unresolved drop.
+  if (gameState.unresolvedComponentDrop ||  gameState.unresolvedTermDrop  ) {
+    return false;
+  }
+
   let $loneComponent = false;
   $('.equation img[alt="freddie"]').each((i,el) => {
     $component = $(el).parent();
     if ($component.data("sign") === 1 && $component.data("exponent") === 1) {
-      const numberOfComponentSiblings =  $component.siblings().length;
-      const numberOfTermSiblings = $component.closest('.term').siblings().length;
-      if (numberOfComponentSiblings === 0 && numberOfTermSiblings === 0) {
-        $loneComponent = $component;
+      const hasComponentSiblings =  $component.siblings().length > 0 ? true : false ;
+      // const numberOfTermSiblings = $component.closest('.term').siblings().length;
+      const $termSiblings = $component.closest('.term').siblings();
+
+      let hasTermSiblings;
+      if ($termSiblings.length > 0) {
+        $termSiblings.each( (i,el) => {
+            //If the length of the components inside the term is zero then hasTermSiblings is false
+            //Note this is a work around because for some reason the zero flask term would not be removed from the dom completely.
+            if ( $(el).find('.component').length > 0 ) {
+              hasTermSiblings = true;
+            }
+        });
+      } else {
+        //If the term has more than 0 term siblings, it is false.
+        hasTermSiblings = false;
       }
 
+
+      if (!hasTermSiblings && !hasComponentSiblings) {
+        $loneComponent = $component;
+      }
     }
   });
   //Returns the lone componet if there is one, otherwise, returns false.
@@ -397,6 +657,9 @@ function equationSideRefresh (termArray, sideNumber) {
     const term = buildTerm(objArray);
     $side.append(term);
   });
+
+
+
 }
 
 //Ensures that any newley created elements are sortable
@@ -420,7 +683,6 @@ function sortableRefresh () {
 
   $('.equation .components').sortable({
       distance: 5,
-      items: "li:not(.unsortable)",
       update: function (event) {
          termUpdate(event);
          componentUpdate(event);
@@ -532,7 +794,8 @@ function levelSelect(levelIndex) {
   levelRefresh(level);
   displayLevelCard(level);
   playerActionsRefresh("+", 1, 1);
-
+  gameState.unresolvedComponentDrop = false;
+  gameState.unresolvedTermDrop = false;
 
 }
 
@@ -677,10 +940,13 @@ function zeroCancel (event) {
 
   //If there are any zeros in the term, cancel the whole term.
   if ($zeros.length > 0) {
-    $termLi.removeClass('infinite pulse').addClass('zoomOut');
+    $termLi.removeClass('infinite pulse animated').addClass('zoomOut');
+
 
     setTimeout(() => {
+      console.log("about to remove", $termLi);
       $termLi.remove();
+      console.log("after remove", $termLi);
     }, 500);
   }
 }
@@ -785,8 +1051,7 @@ function componentDrop  (event) {
     //Assign unresolved component drop to true.
     gameState.unresolvedComponentDrop = true;
 
-    //Disable sorting on the droplist
-    $dropList.sortable( "option", "disabled", true );
+
 
     //Get a jquery selection of all the other componets lists
     const $otherListsOnSide = $dropList.parent().siblings().find('.components');
@@ -808,7 +1073,11 @@ function componentDrop  (event) {
       const $clone = $addedComponent.clone(true);
       ////Add cloned component to the appropriate reserve
       $(reserveSelector).append($clone);
-    }//end for loop
+    }//end of for loop
+    //Refresh sorting for the new elements.
+    sortableRefresh();
+    //Disable sorting on the droplist
+    $dropList.sortable( "option", "disabled", true );
 }//END of if for component drop
   else {
   //During an unresolved component drop, with each successive drop
@@ -837,7 +1106,7 @@ function winUpdate () {
   //Waits a before checking for win. To allow animations to resolve.
   setTimeout(() => {
       const win = detectWin();
-
+      console.log(win);
     //Checks if win came back truthy
     if (win) {
       const $winComponent = win;
@@ -850,7 +1119,7 @@ function winUpdate () {
 
 
 
-  }, 550);
+  }, 700);
 
 
 }
@@ -897,16 +1166,24 @@ $(function() {
 
  // Player Action Button Events Handlers
   $('.plus').click(function () {
-    playerActionsRefresh('+', currentReserveSign(), currentExponent() );
+    if (!gameState.unresolvedComponentDrop && !gameState.unresolvedTermDrop) {
+      playerActionsRefresh('+', currentReserveSign(), currentExponent() );
+    }
   });
   $('.positive-negative').click(function () {
-    playerActionsRefresh(activeOperation(), -1 * currentReserveSign(), currentExponent() );
+    if (!gameState.unresolvedComponentDrop && !gameState.unresolvedTermDrop) {
+      playerActionsRefresh(activeOperation(), -1 * currentReserveSign(), currentExponent() );
+    }
   });
   $('.times-symbol').click(function () {
-    playerActionsRefresh("*", currentReserveSign(), currentExponent());
+    if (!gameState.unresolvedComponentDrop && !gameState.unresolvedTermDrop) {
+      playerActionsRefresh("*", currentReserveSign(), currentExponent());
+    }
   });
   $('.flip').click(function () {
-    playerActionsRefresh(activeOperation(), currentReserveSign(), -1 * currentExponent());
+    if (!gameState.unresolvedComponentDrop && !gameState.unresolvedTermDrop) {
+      playerActionsRefresh(activeOperation(), currentReserveSign(), -1 * currentExponent());
+    }
   });
 
   //Equation Event Handlers

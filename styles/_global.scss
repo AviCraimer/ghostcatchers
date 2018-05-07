@@ -46,13 +46,13 @@ img {
   h2, p {
     max-width: 1100px;
     font-family: $bodyFont;
-    text-align: center;
     margin-left: auto;
     margin-right: auto;
 
   }
 
   h2 {
+    text-align: center;
     font-weight: 700;
     font-size: 30px;
     margin: 1.3em auto;
@@ -63,6 +63,11 @@ img {
     line-height: 1.6;
     }
 
+  .imgWrap {
+    display: block;
+    float: right;
+    width: 70px;
+  }
 
 }
 
