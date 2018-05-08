@@ -1188,6 +1188,8 @@ $(function() {
     }
   });
 
+///I changed these events to target the img tag. Make the touch event on mobile work a bit better, although it's still not great.
+
   //Equation Event Handlers
   // $('.equation').on('click', '.term', function (event) {
   //   if ($(this).hasClass('bounce')) {
@@ -1206,8 +1208,7 @@ $(function() {
   // });
 
 
-
-  $('.equation').on('click', 'img', function (event) {
+  $('.equation').on('click touchstart', 'img', function (event) {
 
     const $this =  $(this);
 
@@ -1228,6 +1229,9 @@ $(function() {
     }
     //Check for win
     winUpdate();
+    //I need to put this whole thing in a separate function. Then make another event listener for the touch event.
   });
+
+
 
 });//END OF DOCUMENT READY FUNCTION
